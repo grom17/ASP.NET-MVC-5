@@ -1,0 +1,56 @@
+﻿@model IEnumerable<StudentModel>
+<h2>Студенты</h2>
+
+<p>
+    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+    {
+        @Html.ActionLink("Добавить студента", "CreateStudent", "Teacher")
+    }
+</p>
+<input class="form-control"
+       name="quick-search"
+       placeholder="Искать по ключевому слову..."
+       data-input="quick-search"
+       data-search-target="#students tbody > tr"
+       data-noresult-text="Нет результатов">
+
+<table id="students" class="slimtable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fullname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grades)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fullname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grades)
+                </td>
+                <td>
+                    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+                {
+                        @Html.ActionLink("Редактировать | ", "EditStudent", new { id = item.Id })
+                        @Html.ActionLink("Профиль | ", "StudentDetails", new { id = item.Id })
+                        @Html.ActionLink("Удалить | ", "DeleteStudent", new { id = item.Id })
+                    }
+                    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student))
+                {
+                        @Html.ActionLink("Профиль", "StudentDetails", new { id = item.Id })
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    
+

@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Студенты";
+}
+
+<div id="studentsDiv" data-action-url="@Url.Action("ReadStudents")" data-detail-url="@Url.Action("StudentDetail")" data-panel="studentWindow" data-loading-msg="LoadingPleaseWait">
+    @Html.Partial("StudentsList", new List<StudentModel>().AsEnumerable())
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/Students")
+}

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SimpleStudentsWebsite.Models.ViewModels.TeacherModel>
+
+@{
+    ViewBag.Title = "Преподаватели";
+}
+
+<h2>Преподаватели</h2>
+<input class="form-control"
+       name="quick-search"
+       placeholder="Искать по ключевому слову..."
+       data-input="quick-search"
+       data-search-target="#teachers tbody > tr"
+       data-noresult-text="Нет результатов">
+
+<p>
+    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
+    {
+        @Html.ActionLink("Добавить преподавателя", "CreateTeacher", "Dean")
+    }
+</p>
+<table id="teachers" class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Fullname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentsCount)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fullname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StudentsCount)
+        </td>
+        <td>
+            @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
+            {
+                @Html.ActionLink("Редактировать | ", "EditTeacher", "Dean", new { id = item.Id })
+                @Html.ActionLink("Профиль | ", "TeacherDetails", new { id = item.Id })
+                @Html.ActionLink("Удалить", "DeleteTeacher", "Dean", new { id = item.Id })
+            }
+            @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+            {
+                @Html.ActionLink("Профиль", "TeacherDetails", new { id = item.Id })
+            }
+        </td>
+    </tr>
+}
+
+</table>
