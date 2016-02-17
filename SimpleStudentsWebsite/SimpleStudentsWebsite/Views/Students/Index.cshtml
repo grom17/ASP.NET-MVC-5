@@ -2,8 +2,13 @@
     ViewBag.Title = "Студенты";
 }
 
-<div id="studentsDiv" data-action-url="@Url.Action("ReadStudents")" data-detail-url="@Url.Action("StudentDetail")" data-panel="studentWindow" data-loading-msg="LoadingPleaseWait">
+<h2>Студенты</h2>
+
+<div id="studentsDiv" data-action-url="@Url.Action("ReadStudents")" data-detail-url="@Url.Action("StudentDetail")" data-loading-msg="Загрузка списка студентов">
     @Html.Partial("StudentsList", new List<StudentModel>().AsEnumerable())
+</div>
+
+<div id="studentDetailsDiv" class="hidden" data-detail-url="@Url.Action("StudentDetails")" data-loading-msg="Загрузка профиля студента">
 </div>
 
 @section scripts

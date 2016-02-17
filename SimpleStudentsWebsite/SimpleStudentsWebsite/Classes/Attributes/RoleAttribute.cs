@@ -16,7 +16,13 @@ namespace SimpleStudentsWebsite.Classes.Attributes
                 filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.RawUrl));
             }
 
-            if (!CookieHelper.Instance.Role.HasFlag(Access))
+            if (Access == (Roles.Student | Roles.Teacher))
+            {
+                if (!CookieHelper.Instance.Role.HasFlag(Roles.Student) &&
+                    !CookieHelper.Instance.Role.HasFlag(Roles.Teacher))
+                    filterContext.HttpContext.Response.StatusCode = 403;
+            }
+            else if (!CookieHelper.Instance.Role.HasFlag(Access))
                 filterContext.HttpContext.Response.StatusCode = 403;
         }
     }

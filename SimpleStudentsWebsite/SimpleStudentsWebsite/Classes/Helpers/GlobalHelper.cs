@@ -6,7 +6,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
     {
         public static string GetFullname(string FirstName, string LastName)
         {
-            return FirstName + " " + LastName;
+            return LastName + " " + FirstName;
         }
 
         public static string Json(object toSerialize)

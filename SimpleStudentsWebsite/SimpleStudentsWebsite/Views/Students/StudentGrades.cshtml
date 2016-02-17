@@ -1,0 +1,53 @@
+﻿@model IEnumerable<StudentGradesModel>
+<br />
+<table id="studentGradesList" class="slimtable">
+    <thead>
+        <tr align="center">
+            <th width="5%">
+                @Html.DisplayNameFor(model => model.TeacherId)
+            </th>
+            <th width="50%">
+                @Html.DisplayNameFor(model => model.TeacherFullName)
+            </th>
+            <th width="30%">
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th width="15%">
+                @Html.DisplayNameFor(model => model.Grade)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="hidden" value="@item.TeacherId" name="TeacherId" />
+                    @Html.DisplayFor(modelItem => item.TeacherId)
+                </td>
+                <td>
+                    <input type="hidden" value="@item.TeacherFullName" name="TeacherFullName" />
+                    @Html.DisplayFor(modelItem => item.TeacherFullName)
+                </td>
+                <td>
+                    <input type="hidden" value="@item.Subject" name="Subject" />                  
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+                    {
+                        <input type="text" value="@item.Grade" name="Grade" />
+                    }
+                    else
+                    {
+                        <input type="hidden" value="@item.Grade" name="Grade" />
+                         @Html.DisplayFor(modelItem => item.Grade)
+                    }
+                </td>
+            </tr>
+
+        }
+    </tbody>
+
+</table>
+<br />

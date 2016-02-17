@@ -81,19 +81,22 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         // Get students array with average grade
         public StudentModel[] GetStudentsArray()
         {
-            var students = (from std in db.Students
-                     join jr in db.Journal
-                     on std.StudentId equals jr.StudentId
-                     group jr by std.StudentId into grp
-                     select new StudentModel
-                     {
-                         Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
-                         Fullname = grp.Select(st => st.Students.FirstName + " " + st.Students.LastName).FirstOrDefault(),
-                         //Fullname = grp.Select(st => st.Students.Fullname).FirstOrDefault(),
-                         Grades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
-                     }).ToArray();
+            var students = db.Students.ToList();
+
+            //var students = (from std in db.Students
+            //         join jr in db.Journal
+            //         on std.StudentId equals jr.StudentId
+            //         group jr by std.StudentId into grp
+            //         select new StudentModel
+            //         {
+            //             Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
+            //             Fullname = grp.Select(st => st.Students.LastName + " " + st.Students.FirstName).FirstOrDefault(),
+            //             //Fullname = grp.Select(st => st.Students.Fullname).FirstOrDefault(),
+            //             Grades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
+            //         }).ToArray();
             if (students != null)
-                return students;
+                //return students;
+                new StudentModel();
             throw new Exception("Ошибка получения списка студентов");
         }
 
@@ -107,7 +110,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
                             select new TeacherModel
                             {
                                 Id = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
-                                Fullname = grp.Select(tc => tc.Teachers.FirstName + " " + tc.Teachers.LastName).FirstOrDefault(),
+                                Fullname = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
                                 StudentsCount = grp.Count()
                             }).ToArray();
             if (teachers != null)
@@ -126,6 +129,22 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             {
                 throw new DBException("GetStudentsList(): ", ex.ToString());
             }        
+        }
+
+        // Get student details
+        public Students GetStudentById(int Id)
+        {
+            try
+            {
+                var student = db.Students.Where(s => s.StudentId == Id).FirstOrDefault();
+                if (student == null)
+                    throw new Exception(string.Format("Студента с Id={0} нет в базе", Id));
+                return student;
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("GetStudentById(): ", ex.ToString());
+            }
         }
 
         // Get best students (student average grade is more or equal total average grade)
@@ -180,6 +199,106 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             {
                 throw new DBException("GetTeachersOfLowerCountOfStudentsList(): ", ex.ToString());
             }
+        }
+
+        // Get student grades list
+        public List<StudentGradesModel> GetStudentGradesList(int Id)
+        {
+            try
+            {
+                var grades = (from tch in db.Teachers
+                                join jr in db.Journal
+                                on tch.TeacherId equals jr.TeacherId
+                                where jr.StudentId == Id
+                                group jr by tch.TeacherId into grp
+                                select new StudentGradesModel
+                                {
+                                    TeacherId = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
+                                    TeacherFullName = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
+                                    Subject = grp.Select(s=>s.Teachers.Subject).FirstOrDefault(),
+                                    Grade = grp.Select(g => g.Grade).FirstOrDefault()
+                                }).ToList();
+                if (grades != null)
+                    return grades;
+                throw new Exception("Ошибка получения списка оценок");
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("GetStudentGradesList(): ", ex.ToString());
+            }
+        }
+
+        public void UpdateStudent(Students model)
+        {
+            try
+            {
+                var student = db.Students.Where(s => s.StudentId == model.StudentId).FirstOrDefault();
+                student.FirstName = model.FirstName;
+                student.LastName = model.LastName;
+                db.Entry(student).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("UpdateStudent(): ", ex.ToString());
+            }
+        }
+
+        public void UpdateStudentGrades(List<StudentGradesModel> model)
+        {
+            try
+            {
+                int teacherId = 0;
+                int studentId = 0;
+                for (int i = 0; i < model.Count; i++)
+                {
+                    teacherId = model[i].TeacherId;
+                    studentId = model[i].StudentId;
+                    var record = db.Journal.Where(jr => jr.TeacherId == teacherId &&
+                                         jr.StudentId == studentId).FirstOrDefault();
+                    if (record != null)
+                    {
+                        record.Grade = model[i].Grade;
+                        db.Entry(record).State = System.Data.Entity.EntityState.Modified;
+                    }
+                    else
+                    {
+                        record = new Journal()
+                        {
+                            StudentId = studentId,
+                            TeacherId = teacherId,
+                            Grade = model[i].Grade
+                        };
+                        record.Teachers = db.Teachers.Where(t => t.TeacherId == teacherId).FirstOrDefault();
+                        record.Students = db.Students.Where(s => s.StudentId == studentId).FirstOrDefault();
+                        db.Journal.Add(record);
+                    }
+                }
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("UpdateStudentGrades(): ", ex.ToString());
+            }
+        }
+
+        // Get teachers
+        public List<Teachers> GetTeachers()
+        {
+            return db.Teachers.ToList();
+        }
+
+        // Get teacher by Id
+        public Teachers GetTeacherById(int Id)
+        {
+            return db.Teachers.Where(t=>t.TeacherId == Id).FirstOrDefault();
+        }
+
+        // Create new student
+        public void CreateStudent(Students student)
+        {
+            db.Entry(student).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
         }
     }
 }

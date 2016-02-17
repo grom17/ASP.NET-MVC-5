@@ -1,0 +1,13 @@
+﻿@model List<SimpleStudentsWebsite.DAL.Teachers>
+
+Добавить преподавателя: 
+<select id="teachersList" multiple="multiple">
+    <optgroup label="Преподаватели">
+        @foreach (var item in Model)
+        {
+            <option value="@item.TeacherId">@item.Fullname</option>
+        }
+    </optgroup>
+</select>
+<input id="addTeacher" type="button" onclick="AddTeacher()" class="btn btn-default" value="OK">
+

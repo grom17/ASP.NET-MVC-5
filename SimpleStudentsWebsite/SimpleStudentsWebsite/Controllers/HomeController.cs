@@ -6,7 +6,7 @@ namespace SimpleStudentsWebsite.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToPrevious();
+            return View();
         }
 
         public ActionResult About()

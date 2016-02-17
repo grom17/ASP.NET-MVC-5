@@ -1,3 +1,4 @@
+using SimpleStudentsWebsite.Classes.Attributes;
 using SimpleStudentsWebsite.Classes.Helpers;
 using System.ComponentModel.DataAnnotations;
 namespace SimpleStudentsWebsite.DAL
@@ -6,14 +7,17 @@ namespace SimpleStudentsWebsite.DAL
     {
         [Required]
         [StringLength(50)]
+        [CustomDisplayName("FirstName")]
         public string FirstName { get; set; }
 
         [Required]
         [StringLength(50)]
+        [CustomDisplayName("LastName")]
         public string LastName { get; set; }
 
         [Required]
         [StringLength(50)]
+        [CustomDisplayName("Login")]
         public string Login { get; set; }
 
         [Required]

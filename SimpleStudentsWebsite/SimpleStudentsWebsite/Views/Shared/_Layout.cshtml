@@ -1,14 +1,15 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8 (with signature)" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Simple Students Website</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
-<body>
+<body data-log-error="@Url.Action("LogError", "Error")">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -25,7 +26,7 @@
                     <li>@Html.ActionLink("Преподаватели", "Index", "Teachers")</li>
                     @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
                     {
-                        <li>@Html.ActionLink("Отчеты", "Index", "Dean")</li> 
+                        <li>@Html.ActionLink("Отчеты", "Index", "Reports")</li> 
                     }
                     <li>@Html.ActionLink("О сайте", "About", "Home")</li>
                     <li>@Html.ActionLink("Контакты", "Contact", "Home")</li>
@@ -47,6 +48,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/noty")
     @Scripts.Render("~/bundles/common")
     @RenderSection("scripts", required: false)
 </body>

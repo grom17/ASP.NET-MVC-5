@@ -30,22 +30,33 @@ namespace SimpleStudentsWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
-                return View(model);
-
             try
             {
+                CheckModelState(ModelState, "Account.Login");
+
                 LoginModel loginResult = DBHelper.Instance.Login(model.Login, model.Password);
                 var ck = FormsAuthentication.GetAuthCookie(loginResult.Fullname, false);
                 HttpContext.Response.Cookies.Add(ck);
                 HttpContext.User = Thread.CurrentPrincipal = new GenericPrincipal(HttpContext.User.Identity, new string[0]);
                 CookieHelper.Instance.Role = loginResult.Role;
-                return RedirectToLocal(returnUrl);
+                string url = "";
+                if (loginResult.Role == Classes.Roles.Student)
+                    url = Url.Action("Index", "Students");
+                else if (loginResult.Role == Classes.Roles.Teacher)
+                    url = Url.Action("Index", "Teachers");
+                else if (loginResult.Role == Classes.Roles.Dean)
+                    url = Url.Action("Index", "Reports");
+                else
+                    url = Url.Action("Index", "Home");
+                if (!string.IsNullOrEmpty(returnUrl))
+                    url = returnUrl;
+                return Json(new { url = url });
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", ex.Message);
-                return View(model);
+                return Json(new { errors = ex.Message });
+                //ModelState.AddModelError("", ex.Message);
+                //return View(model);
             }
         }
 
@@ -57,13 +68,6 @@ namespace SimpleStudentsWebsite.Controllers
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
-        }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
-            return RedirectToPrevious();
         }
     }
 }

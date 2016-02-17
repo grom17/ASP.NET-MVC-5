@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Messages>
+  <Message name="FirstName">
+    <value>Имя</value>
+  </Message>
+  <Message name="LastName">
+    <value>Фамилия</value>
+  </Message>
+  <Message name="Login">
+    <value>Логин</value>
+  </Message>
+  <Message name="ErrorInvalidField">
+    <value>Мы не можем выполнить Ваш запрос. Исправьте введенные данные</value>
+  </Message>
+  <Message name="AuthenticatingPleaseWait">
+    <value>Аутентификация. Пожалуйста, подождите</value>
+  </Message>
+  <Message name="TeacherId">
+    <value>Id</value>
+  </Message>
+  <Message name="TeacherFullName">
+    <value>Преподаватель</value>
+  </Message>
+  <Message name="Subject">
+    <value>Предмет</value>
+  </Message>
+  <Message name="Grade">
+    <value>Оценка</value>
+  </Message>
+  <Message name="Password">
+    <value>Пароль</value>
+  </Message>
+  <Message name="ConfirmPassword">
+    <value>Подтвердите пароль</value>
+  </Message>
+</Messages>

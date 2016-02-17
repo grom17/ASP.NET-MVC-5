@@ -1,0 +1,68 @@
+﻿@model IEnumerable<StudentModel>
+
+<p>
+    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+    {
+        @Html.ActionLink("Добавить студента", "PrepareCreateStudent", "Teacher")
+    }
+</p>
+<div class="form-group">
+    <input class="form-control"
+           name="quick-search"
+           placeholder="Искать по ключевому слову..."
+           data-input="quick-search"
+           data-search-target="#students tbody > tr"
+           data-noresult-text="Нет результатов">
+</div>
+
+<table id="students" class="slimtable">
+    <thead>
+        <tr align="center">
+            <th width="60%">
+                @Html.DisplayNameFor(model => model.Fullname)
+            </th>
+            <th width="20%">
+                @Html.DisplayNameFor(model => model.Grades)
+            </th>
+            @if (Request.IsAuthenticated && 
+                (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher) ||
+                CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student)))
+            {
+                <th width="20%"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fullname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grades)
+                </td>
+                @if (Request.IsAuthenticated)
+                {
+                    
+                    if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+                    {
+                        <td>
+                            <button id="showStudentDetailsBtn" onclick="StudentDetails(@item.Id)">Профиль</button>
+                            @Html.ActionLink("Удалить", "DeleteStudent", new { id = item.Id })
+                        </td>
+                    }
+                    if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student))
+                    {
+                        <td>
+                            <button id="showStudentDetailsBtn" onclick="StudentDetails(@item.Id)">Профиль</button>
+                        </td>
+                    }
+                }
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+

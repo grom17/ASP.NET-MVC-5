@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TeacherModel>
+
+<p>
+    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
+    {
+        @Html.ActionLink("Добавить преподавателя", "CreateTeacher", "Dean")
+    }
+</p>
+
+<div class="form-group">
+<input class="form-control"
+       name="quick-search"
+       placeholder="Искать по ключевому слову..."
+       data-input="quick-search"
+       data-search-target="#teachers tbody > tr"
+       data-noresult-text="Нет результатов">
+</div>
+
+<table id="teachers" class="slimtable">
+    <thead>
+        <tr>
+            <th width="40%">
+                @Html.DisplayNameFor(model => model.Fullname)
+            </th>
+            <th width="20%">
+                @Html.DisplayNameFor(model => model.StudentsCount)
+            </th>
+            @if (Request.IsAuthenticated &&
+                (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher) ||
+                CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean)))
+            {
+                <th width="40%"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fullname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentsCount)
+            </td>
+            
+                @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
+                {
+                    <td>
+                    @Html.ActionLink("Редактировать | ", "EditTeacher", "Dean", new { id = item.Id })
+                    @Html.ActionLink("Профиль | ", "TeacherDetails", new { id = item.Id })
+                    @Html.ActionLink("Удалить", "DeleteTeacher", "Dean", new { id = item.Id })
+                    </td>
+                }
+                @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+                {
+                    <td>
+                    @Html.ActionLink("Профиль", "TeacherDetails", new { id = item.Id })
+                    </td>
+                }
+        </tr>
+    }
+    </tbody>
+</table>
+

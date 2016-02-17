@@ -1,0 +1,84 @@
+﻿@model SimpleStudentsWebsite.DAL.Students
+@{ var Role = CookieHelper.Instance.Role; }
+
+@if (Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+{
+    using (Ajax.BeginForm("UpdateStudentDetails", new { }, new AjaxOptions() {
+        OnBegin = "OnBeginUpdateStudent", OnComplete = "OnCompleteUpdateStudent",
+        OnSuccess = "OnSuccessUpdateStudent", OnFailure = "AjaxCommonErrorHandling" }, 
+        new { Id = "studentDetailForm", @class = "form-horizontal", role = "form" }))
+    {
+        <hr />
+        @Html.HiddenFor(m => m.StudentId)
+        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Login, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.HiddenFor(m => m.Login)
+                @Html.DisplayFor(m => m.Login, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div id="addTeacherSelect" data-action-url="@Url.Action("LoadTeachers")" data-loading-msg="Загрузка преподавателей">
+        </div>
+        <div id="studentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="updateStudent" type="button" value="Обновить" class="btn btn-default"
+                       data-loading-msg="Обновление данных студента" 
+                       onclick="studentDetailFormSubmit()"/>
+            </div>
+        </div>
+    }
+}
+else {
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-horizontal">
+                <hr />
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.DisplayFor(m => m.LastName, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Login, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.DisplayFor(m => m.Login, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="studentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
+    </div>
+}
+
+<br />
+<p>
+    <input id="backToList" type="button" value="Назад" class="btn btn-default"
+            onclick="BackToList()" />
+</p>
+
