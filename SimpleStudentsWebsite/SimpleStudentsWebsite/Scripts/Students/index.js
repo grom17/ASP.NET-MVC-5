@@ -215,6 +215,7 @@ function AddTeacher()
 
 function BackToList()
 {
+    window.location = "/Students";
     $("#studentsDiv").removeClass("hidden");
     $("#studentDetailsDiv").addClass("hidden");
     $("#StudentGrades").addClass("hidden");
@@ -222,4 +223,18 @@ function BackToList()
         ReadStudents();
         NeedRefresh = false;
     }
+}
+
+function OnBeginCreateStudent() {
+    LoadingState(true);
+    LoadingStateMessage($("#createStudentBtn"));
+}
+function OnSuccessCreateStudent(result) {
+    AjaxCommonSuccessHandling(result, function () {
+        SetNeedRefresh();
+        BackToList();
+    });
+}
+function OnCompleteCreateStudent(result) {
+    LoadingState(false);
 }

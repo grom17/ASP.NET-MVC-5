@@ -3,7 +3,7 @@
 <p>
     @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
     {
-        @Html.ActionLink("Добавить студента", "PrepareCreateStudent", "Teacher")
+        @Html.ActionLink("Добавить студента", "PrepareCreateStudent", "Teachers")
     }
 </p>
 <div class="form-group">

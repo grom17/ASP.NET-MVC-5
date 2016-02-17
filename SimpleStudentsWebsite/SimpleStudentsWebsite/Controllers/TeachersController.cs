@@ -1,4 +1,5 @@
-﻿using SimpleStudentsWebsite.Classes.Attributes;
+﻿using SimpleStudentsWebsite.Classes;
+using SimpleStudentsWebsite.Classes.Attributes;
 using SimpleStudentsWebsite.Classes.Helpers;
 using SimpleStudentsWebsite.DAL;
 using SimpleStudentsWebsite.Models;
@@ -32,7 +33,7 @@ namespace SimpleStudentsWebsite.Controllers
         {
             try
             {
-                return PartialView("NewStudent", new NewStudent());
+                return PartialView("~/Views/Students/NewStudent.cshtml", new NewStudent());
             }
             catch (Exception ex)
             {
@@ -43,10 +44,15 @@ namespace SimpleStudentsWebsite.Controllers
         // POST: Teachers/CreateStudent
         [Role(Access = Classes.Roles.Teacher)]
         [HttpPost]
-        public ActionResult CreateStudent(Students student)
+        public ActionResult CreateStudent(NewStudent newStudent)
         {
             try
             {
+                Students student = new Students() {
+                    FirstName = newStudent.FirstName,
+                    LastName = newStudent.LastName, Login = newStudent.Login,
+                    Password = AESCrypt.EncryptString(newStudent.SecretKey, "SSWSecretKey")
+                };
                 DBHelper.Instance.CreateStudent(student);
                 return Json(new { success = "Студент успешно добавлен" });
             }

@@ -81,22 +81,19 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         // Get students array with average grade
         public StudentModel[] GetStudentsArray()
         {
-            var students = db.Students.ToList();
-
-            //var students = (from std in db.Students
-            //         join jr in db.Journal
-            //         on std.StudentId equals jr.StudentId
-            //         group jr by std.StudentId into grp
-            //         select new StudentModel
-            //         {
-            //             Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
-            //             Fullname = grp.Select(st => st.Students.LastName + " " + st.Students.FirstName).FirstOrDefault(),
-            //             //Fullname = grp.Select(st => st.Students.Fullname).FirstOrDefault(),
-            //             Grades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
-            //         }).ToArray();
+            var students = (from std in db.Students
+                            join jr in db.Journal
+                            on std.StudentId equals jr.StudentId
+                            group jr by std.StudentId into grp
+                            select new StudentModel
+                            {
+                                Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
+                                Fullname = grp.Select(st => st.Students.LastName + " " + st.Students.FirstName).FirstOrDefault(),
+                                //Fullname = grp.Select(st => st.Students.Fullname).FirstOrDefault(),
+                                Grades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
+                            }).ToArray();
             if (students != null)
-                //return students;
-                new StudentModel();
+                return students;
             throw new Exception("Ошибка получения списка студентов");
         }
 
@@ -297,7 +294,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         // Create new student
         public void CreateStudent(Students student)
         {
-            db.Entry(student).State = System.Data.Entity.EntityState.Modified;
+            db.Students.Add(student);
             db.SaveChanges();
         }
     }
