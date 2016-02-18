@@ -56,7 +56,9 @@ namespace SimpleStudentsWebsite.Controllers
             filterContext.ExceptionHandled = false;
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {
-                filterContext.Result = Json(new { errors = filterContext.Exception.Message }, JsonRequestBehavior.AllowGet);
+                string errors = filterContext.Exception.Message;
+                errors = filterContext.Exception.InnerException != null ? errors + filterContext.Exception.InnerException.Message : errors;
+                filterContext.Result = Json(new { errors = errors }, JsonRequestBehavior.AllowGet);
                 filterContext.ExceptionHandled = true;
             }
             else

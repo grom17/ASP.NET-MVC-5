@@ -1,14 +1,5 @@
 ﻿@model NewStudent
-@{ 
-    Layout = "~/Views/Shared/_Layout.cshtml"; 
-}
-@using (Ajax.BeginForm("CreateStudent", new { }, new AjaxOptions()
-{
-    OnBegin = "OnBeginCreateStudent",
-    OnComplete = "OnCompleteCreateStudent",
-    OnSuccess = "OnSuccessCreateStudent",
-    OnFailure = "AjaxCommonErrorHandling"
-},
+@using (Ajax.BeginForm("CreateStudent", new { }, new AjaxOptions() { },
         new { Id = "newStudentForm", @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -57,22 +48,21 @@
             </div>
         </div>
 
+        <div id="addTeacherSelect" data-action-url="@Url.Action("LoadTeachers")" data-loading-msg="Загрузка преподавателей">
+        </div>
+        <div id="studentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input id="createStudentBtn" data-loading-msg="Добавление студента"
-                       type="submit" value="Создать" class="btn btn-default" />
+                <input id="createStudentBtn" type="submit" value="Добавление студента" class="btn btn-default"
+                       data-loading-msg="Добавление студента"
+                       onclick="newStudentFormSubmit()" />
             </div>
         </div>
 }
-
 <br />
 <p>
     <input id="backToList" type="button" value="Назад" class="btn btn-default"
            onclick="BackToList()" />
 </p>
-
-@section scripts
-{
-    @Scripts.Render("~/bundles/teachers")
-    @Scripts.Render("~/bundles/students")
-}

@@ -453,10 +453,10 @@ if (typeof Object.create !== 'function') {
             easing:'swing',
             speed:500
         },
-        timeout:false,
+        timeout:30,
         force:false,
         modal:false,
-        maxVisible:5,
+        maxVisible:3,
 		killer: false,
         closeWith:['click'],
         callback:{

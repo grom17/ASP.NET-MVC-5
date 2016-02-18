@@ -58,7 +58,9 @@ namespace SimpleStudentsWebsite.Controllers
         {
             try
             {
-                var studentGrades = DBHelper.Instance.GetStudentGradesList(Id);
+                var studentGrades = new List<StudentGradesModel>();
+                if (Id != 0 ) 
+                    studentGrades = DBHelper.Instance.GetStudentGradesList(Id);
                 return PartialView("StudentGrades", studentGrades);
             }
             catch (Exception ex)
@@ -120,6 +122,8 @@ namespace SimpleStudentsWebsite.Controllers
         {
             try
             {
+                if (grades == null || grades.Any(g=>g.Grade == null))
+                    throw new Exception("Введите все оценки");
                 DBHelper.Instance.UpdateStudentGrades(grades);
                 return Json(new { success = "Оценки студента обновлены" });
             }
@@ -135,7 +139,7 @@ namespace SimpleStudentsWebsite.Controllers
         {
             try
             {
-                return PartialView("~/Views/Students/NewStudent.cshtml", new NewStudent());
+                return PartialView("NewStudent", new NewStudent());
             }
             catch (Exception ex)
             {
@@ -146,19 +150,14 @@ namespace SimpleStudentsWebsite.Controllers
         // POST: Students/CreateStudent
         [Role(Access = Classes.Roles.Teacher)]
         [HttpPost]
-        public ActionResult CreateStudent(NewStudent newStudent)
+        public ActionResult CreateStudent(Students newStudent)
         {
             try
             {
-                Students student = new Students()
-                {
-                    FirstName = newStudent.FirstName,
-                    LastName = newStudent.LastName,
-                    Login = newStudent.Login,
-                    Password = AESCrypt.EncryptString(newStudent.SecretKey, "SSWSecretKey")
-                };
-                DBHelper.Instance.CreateStudent(student);
-                return Json(new { success = "Студент успешно добавлен" });
+                CheckModelState(ModelState, "Students.CreateStudent");
+                newStudent.Password = AESCrypt.EncryptString(newStudent.Password, "SSWSecretKey");
+                var Id = DBHelper.Instance.CreateStudent(newStudent);
+                return Json(new { success = "Студент успешно добавлен", Id = Id });
             }
             catch (Exception ex)
             {
@@ -177,7 +176,7 @@ namespace SimpleStudentsWebsite.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { errors = ex.Message, JsonRequestBehavior.AllowGet });
+                return Json(new { errors = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <div id="addTeacherSelect" data-action-url="@Url.Action("LoadTeachers")" data-loading-msg="Загрузка преподавателей">
+        <div id="addTeacherSelect" data-action-url="@Url.Action("LoadTeachers")" data-loading-msg="Загрузка преподавателей" data-add-teacher-msg="Добавление преподавателей">
         </div>
         <div id="studentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
         </div>
@@ -41,41 +41,43 @@
             <div class="col-md-offset-2 col-md-10">
                 <input id="updateStudent" type="button" value="Обновить" class="btn btn-default"
                        data-loading-msg="Обновление данных студента" 
-                       onclick="studentDetailFormSubmit()"/>
+                       onclick="studentDetailFormSubmit()" />
                 <input id="deleteStudent" type="button" value="Удалить" class="btn btn-default"
                        data-loading-msg="Удаление студента"
-                       onclick="StudentDelete()" data-action-url="@Url.Action("DeleteStudent")" />
+                       onclick="StudentDelete(@Model.StudentId)" data-action-url="@Url.Action("DeleteStudent")" />
             </div>
         </div>
     }
 }
 else {
-    <div class="row">
-        <div class="col-md-8">
-            <div class="form-horizontal">
-                <hr />
-                <div class="form-group">
-                    @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+    <div id="studentDetailForm">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-horizontal">
+                    <hr />
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(m => m.FirstName, new { @class = "form-control" })
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(m => m.LastName, new { @class = "form-control" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(m => m.LastName, new { @class = "form-control" })
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Login, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.DisplayFor(m => m.Login, new { @class = "form-control" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Login, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.DisplayFor(m => m.Login, new { @class = "form-control" })
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="studentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
+        <div id="studentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
+        </div>
     </div>
 }
 

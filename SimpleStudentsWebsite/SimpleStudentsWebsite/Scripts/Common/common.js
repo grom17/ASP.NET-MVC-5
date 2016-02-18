@@ -1,6 +1,7 @@
 ﻿$.ajaxSetup({ cache: false }); // prevent cache the ajax response for IE
 $(document).ready(function () {
     setInterval('updateClock()', 1000);
+    setTimeout('updateDBInfo()', 0);
 });
 
 window.onerror = function (msg, url, line, col, error) {
@@ -67,6 +68,16 @@ function LogErrorOnServer(operation, error) {
         success: function (result) {
         }
     })
+}
+
+// String.Format. First, checks if it isn't implemented yet.
+if (!String.prototype.format) {
+    String.prototype.format = function () {
+        var args = arguments;
+        return this.replace(/{(\d+)}/g, function (match, number) {
+            return typeof args[number] != 'undefined' ? args[number] : match;
+        });
+    };
 }
 
 function addValidator(form) {

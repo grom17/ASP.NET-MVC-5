@@ -4,6 +4,9 @@
 
 <h2>Студенты</h2>
 
+<div id="newStudentDiv" class="hidden" data-action-url="@Url.Action("PrepareCreateStudent")" data-loading-msg="Загрузка карточки нового студента">
+</div>
+
 <div id="studentsDiv" data-action-url="@Url.Action("ReadStudents")" data-detail-url="@Url.Action("StudentDetail")" data-loading-msg="Загрузка списка студентов">
     @Html.Partial("StudentsList", new List<StudentModel>().AsEnumerable())
 </div>

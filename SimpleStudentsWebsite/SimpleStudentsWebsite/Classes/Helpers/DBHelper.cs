@@ -113,7 +113,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
                             }).ToArray();
             if (teachers != null)
                 return teachers;
-            throw new Exception("Ошибка получения списка преподователей");
+            throw new Exception("Ошибка получения списка преподавателей");
         }
 
         // Get students with average grades list
@@ -286,6 +286,12 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             return db.Teachers.ToList();
         }
 
+        // Get students
+        public List<Students> GetStudents()
+        {
+            return db.Students.ToList();
+        }
+
         // Get teacher by Id
         public Teachers GetTeacherById(int Id)
         {
@@ -293,10 +299,11 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         }
 
         // Create new student
-        public void CreateStudent(Students student)
+        public int CreateStudent(Students student)
         {
             db.Students.Add(student);
             db.SaveChanges();
+            return db.Students.Where(s => s.Login == student.Login).Select(s => s.StudentId).FirstOrDefault();
         }
 
         // Remove student from DB by Id
@@ -306,8 +313,15 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             if (student != null)
             {
                 db.Entry(student).State = EntityState.Deleted;
-                db.SaveChanges();
+                foreach (var jr in db.Journal.Local.ToList())
+                {
+                    if (jr.Students == null)
+                    {
+                        db.Journal.Remove(jr);
+                    }
+                }
             }
+            db.SaveChanges();
         }
     }
 }

@@ -263,6 +263,7 @@
     <Content Include="Content\Bootstrap\bootstrap-theme.css.map" />
     <None Include="Properties\PublishProfiles\My.pubxml" />
     <None Include="Scripts\JQuery\jquery-2.2.0.intellisense.js" />
+    <Content Include="Scripts\Common\dbInfo.js" />
     <Content Include="Scripts\Common\fSelect.js" />
     <Content Include="Scripts\JQuery\jquery-2.2.0.js" />
     <Content Include="Scripts\JQuery\jquery-2.2.0.min.js" />
@@ -301,6 +302,9 @@
     <Content Include="Scripts\noty\promise.js" />
     <Content Include="Scripts\noty\themes\default.js" />
     <Content Include="Scripts\Reports\index.js" />
+    <Content Include="Scripts\Students\deleteStudent.js" />
+    <Content Include="Scripts\Students\newStudent.js" />
+    <Content Include="Scripts\Students\studentDetails.js" />
     <Content Include="Scripts\Teachers\index.js" />
     <Content Include="Scripts\Students\index.js" />
     <Content Include="Scripts\_references.js" />

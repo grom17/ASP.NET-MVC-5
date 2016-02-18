@@ -32,150 +32,20 @@ function ReadStudents() {
     });
 }
 
-function StudentDetails(Id) {
-    $("#studentsDiv").addClass("hidden");
-    var div = $("#studentDetailsDiv");
-    div.removeClass("hidden");
-    LoadingState(true, div);
-    LoadingStateMessage(div, div);
-    $.ajax({
-        url: "/Students/StudentDetails",
-        data: { Id: Id },
-        success: function (res) {
-            AjaxCommonSuccessHandling(res, function () {
-                $("#studentsDiv").addClass("hidden");
-                div.html(res);
-                LoadStudentGrades(Id);
-                LoadTeachers();
-            });         
-        },
-        error: AjaxCommonErrorHandling,
-        complete: function (req, status) {
-            LoadingState(false, div);
-        }
-    });
-}
-
-function LoadStudentGrades(Id)
+function BackToList()
 {
-    var div = $("#studentGrades");
-    LoadingState(true, div);
-    LoadingStateMessage(div, div);
-    $.ajax({
-        url: div.data("action-url"),
-        data: { Id: Id },
-        success: function (res) {
-            AjaxCommonSuccessHandling(res, function () {
-                div.html(res);
-                $("#studentGradesList").slimtable({
-                    colSettings:
-                        [{
-                            colNumber: 3, enableSort: false
-                        }]
-                });
-            });
-        },
-        error: AjaxCommonErrorHandling,
-        complete: function (req, status) {
-            LoadingState(false, div);
-        }
-    });
-}
-
-function studentDetailFormSubmit()
-{
-    addValidator("studentDetailForm");
-    if ($("#studentDetailForm").valid()) {
-        OnBeginUpdateStudent();
-        var grades = [];
-        $('#studentGradesList tr').each(function () {
-            var td = $('td', this);            
-            grades.push({
-                StudentId: $("#StudentId").val(),
-                TeacherId: $('input[name="TeacherId"]', td).val(),
-                TeacherFullName: $('input[name="TeacherFullName"]', td).val(),
-                Subject: $('input[name="Subject"]', td).val(),
-                Grade: $('input[name="Grade"]', td).val()
-            });
-        });
-        grades.shift();
-        var student = [];
-        student.push({
-            StudentId: $("#StudentId").val(),
-            FirstName: $("#FirstName").val(),
-            LastName: $("#LastName").val(),
-            Login: $("#Login").val(),
-        });
-
-        $.ajax({
-            url: "/Students/UpdateStudentDetails",
-            type: "POST",
-            data:
-                {
-                    StudentId: $("#StudentId").val(),
-                    FirstName: $("#FirstName").val(),
-                    LastName: $("#LastName").val(),
-                    Login: $("#Login").val()
-                }
-            ,
-            success: function (result) { OnSuccessUpdateStudent(result) },
-            error: AjaxCommonErrorHandling,
-            complete: function (req, status) {
-                OnCompleteUpdateStudent();
-            }
-        });
-
-        $.ajax({
-            url: "/Students/UpdateStudentGrades",
-            type: "POST",
-            data: 
-                JSON.stringify(grades)
-            ,
-            contentType: 'application/json; charset=utf-8',
-            success: function (result) { OnSuccessUpdateStudent(result) },
-            error: AjaxCommonErrorHandling,
-            complete: function (req, status) {
-                OnCompleteUpdateStudent();
-            }
-        });
+    $("#studentsDiv").removeClass("hidden");
+    $("#studentDetailsDiv").addClass("hidden");
+    $("#StudentGrades").addClass("hidden");
+    $("#newStudentDiv").addClass("hidden");
+    if (NeedRefresh) {
+        ReadStudents();
+        NeedRefresh = false;
     }
 }
 
-function StudentDelete() {
-    div = $("#deleteStudent");
-    LoadingState(true, div);
-    LoadingStateMessage(div, div);
-    $.ajax({
-        url: div.data("action-url"),
-        data: {
-                Id: $("#StudentId").val() }
-        ,
-        success: function (result) {
-            OnSuccessDeleteStudent(result);
-        },
-        error: AjaxCommonErrorHandling,
-        complete: function (req, status) {
-            LoadingState(false, div);
-        }
-    });
-}
-
-function OnBeginUpdateStudent() {
-    LoadingState(true);
-    LoadingStateMessage($("#updateStudent"));
-}
-function OnSuccessUpdateStudent(result) {
-    AjaxCommonSuccessHandling(result, function () {
-        SetNeedRefresh();
-    });
-}
-function OnCompleteUpdateStudent(result) {
-    LoadingState(false);
-}
-
-function LoadTeachers()
-{
-    var div = $("#addTeacherSelect");
+function LoadTeachers() {
+    var div = $("div#addTeacherSelect");
     LoadingState(true, div);
     LoadingStateMessage(div, div);
     $.ajax({
@@ -183,7 +53,7 @@ function LoadTeachers()
         success: function (res) {
             AjaxCommonSuccessHandling(res, function () {
                 div.html(res);
-                $("#teachersList").fSelect({
+                $("select#teachersList").fSelect({
                     placeholder: "Выберите преподавателей",
                     searchText: "Искать",
                     overflowText: '{n} выбрано',
@@ -197,8 +67,10 @@ function LoadTeachers()
     });
 }
 
-function AddTeacher()
-{
+function AddTeacher() {
+    div = $("#addTeacherSelect");
+    LoadingState(true, div);
+    LoadingStateMessage(div, div);
     var currentIds = [];
     $('#studentGradesList tr').each(function () {
         var td = $('td', this);
@@ -222,45 +94,15 @@ function AddTeacher()
                     var fullname = res.Fullname;
                     var subject = res.Subject;
                     $('#studentGradesList tr:last').after(
-                        '<tr><td><input type="hidden" value="'+ Id +'" name="TeacherId">' + Id + '</td><td>' +
+                        '<tr><td><input type="hidden" value="' + Id + '" name="TeacherId">' + Id + '</td><td>' +
                         fullname + '</td><td>' + subject +
                         '</td><td><input type="text" value="" name="Grade"></td></tr>');
                 });
             },
-            error: AjaxCommonErrorHandling
+            error: AjaxCommonErrorHandling,
+            complete: function (req, status) {
+                LoadingState(false, div);
+            }
         });
-    });
-}
-
-function BackToList()
-{
-    window.location = "/Students";
-    $("#studentsDiv").removeClass("hidden");
-    $("#studentDetailsDiv").addClass("hidden");
-    $("#StudentGrades").addClass("hidden");
-    if (NeedRefresh) {
-        ReadStudents();
-        NeedRefresh = false;
-    }
-}
-
-function OnBeginCreateStudent() {
-    LoadingState(true);
-    LoadingStateMessage($("#createStudentBtn"));
-}
-function OnSuccessCreateStudent(result) {
-    AjaxCommonSuccessHandling(result, function () {
-        SetNeedRefresh();
-        BackToList();
-    });
-}
-function OnCompleteCreateStudent(result) {
-    LoadingState(false);
-}
-
-function OnSuccessDeleteStudent(result) {
-    AjaxCommonSuccessHandling(result, function () {
-        SetNeedRefresh();
-        BackToList();
     });
 }
