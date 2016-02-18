@@ -4,6 +4,7 @@ using SimpleStudentsWebsite.Models;
 using SimpleStudentsWebsite.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace SimpleStudentsWebsite.Classes.Helpers
@@ -296,6 +297,17 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         {
             db.Students.Add(student);
             db.SaveChanges();
+        }
+
+        // Remove student from DB by Id
+        public void DeleteStudent(int Id)
+        {
+            var student = db.Students.Where(s => s.StudentId == Id).FirstOrDefault();
+            if (student != null)
+            {
+                db.Entry(student).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
     }
 }

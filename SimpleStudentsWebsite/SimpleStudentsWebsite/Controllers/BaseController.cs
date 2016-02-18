@@ -49,6 +49,29 @@ namespace SimpleStudentsWebsite.Controllers
             }
         }
 
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            var operation = string.Format("{0}.{1}", filterContext.RouteData.Values["controller"], filterContext.RouteData.Values["action"]);
+            //Logger.LogError(operation, filterContext.Exception);
+            filterContext.ExceptionHandled = false;
+            if (filterContext.HttpContext.Request.IsAjaxRequest())
+            {
+                filterContext.Result = Json(new { errors = filterContext.Exception.Message }, JsonRequestBehavior.AllowGet);
+                filterContext.ExceptionHandled = true;
+            }
+            else
+            {
+                filterContext.Result = RedirectToAction("Index", "Error");
+                filterContext.ExceptionHandled = true;
+                TempData["Exception"] = filterContext.Exception;
+            }
+
+        if (!filterContext.ExceptionHandled)
+            base.OnException(filterContext);
+        else
+            filterContext.HttpContext.Response.StatusCode = 200;
+        }
+
         public void CheckModelState(ModelStateDictionary modelState, string method)
         {
 

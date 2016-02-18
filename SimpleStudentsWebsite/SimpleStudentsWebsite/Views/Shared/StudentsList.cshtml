@@ -3,7 +3,7 @@
 <p>
     @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
     {
-        @Html.ActionLink("Добавить студента", "PrepareCreateStudent", "Teachers")
+        @Html.ActionLink("Добавить студента", "PrepareCreateStudent", "Students")
     }
 </p>
 <div class="form-group">
@@ -44,18 +44,13 @@
                 </td>
                 @if (Request.IsAuthenticated)
                 {
-                    
-                    if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+
+                    if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher) ||
+                        CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student))
                     {
                         <td>
                             <button id="showStudentDetailsBtn" onclick="StudentDetails(@item.Id)">Профиль</button>
-                            @Html.ActionLink("Удалить", "DeleteStudent", new { id = item.Id })
-                        </td>
-                    }
-                    if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student))
-                    {
-                        <td>
-                            <button id="showStudentDetailsBtn" onclick="StudentDetails(@item.Id)">Профиль</button>
+                            
                         </td>
                     }
                 }

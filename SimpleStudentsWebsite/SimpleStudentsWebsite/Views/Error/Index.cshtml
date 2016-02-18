@@ -1,0 +1,22 @@
+﻿@model Exception
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Ошибка";
+}
+<div>
+    <div>
+        @{
+            var message = "Ошибка: ";
+            if (Request.IsLocal && Model != null)
+            {
+
+                message = Model.Message + (string.IsNullOrEmpty(Model.InnerException.Message) ? "" : " Error message: " + Model.InnerException.Message);
+            }
+        }
+        <a><i class="fa fa-5x fa-warning"></i></a>
+        <h2>InternalServerError:</h2>
+        <h3>
+            @message
+        </h3>
+    </div>
+</div>

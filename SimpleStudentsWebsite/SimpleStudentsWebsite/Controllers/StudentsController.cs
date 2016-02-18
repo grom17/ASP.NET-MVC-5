@@ -1,6 +1,8 @@
-﻿using SimpleStudentsWebsite.Classes.Attributes;
+﻿using SimpleStudentsWebsite.Classes;
+using SimpleStudentsWebsite.Classes.Attributes;
 using SimpleStudentsWebsite.Classes.Helpers;
 using SimpleStudentsWebsite.DAL;
+using SimpleStudentsWebsite.Models;
 using SimpleStudentsWebsite.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -124,6 +126,58 @@ namespace SimpleStudentsWebsite.Controllers
             catch (Exception ex)
             {
                 return Json(new { errors = ex.Message });
+            }
+        }
+
+        // Get: Students/CreateStudent
+        [Role(Access = Classes.Roles.Teacher)]
+        public ActionResult PrepareCreateStudent()
+        {
+            try
+            {
+                return PartialView("~/Views/Students/NewStudent.cshtml", new NewStudent());
+            }
+            catch (Exception ex)
+            {
+                return Json(new { errors = ex.Message });
+            }
+        }
+
+        // POST: Students/CreateStudent
+        [Role(Access = Classes.Roles.Teacher)]
+        [HttpPost]
+        public ActionResult CreateStudent(NewStudent newStudent)
+        {
+            try
+            {
+                Students student = new Students()
+                {
+                    FirstName = newStudent.FirstName,
+                    LastName = newStudent.LastName,
+                    Login = newStudent.Login,
+                    Password = AESCrypt.EncryptString(newStudent.SecretKey, "SSWSecretKey")
+                };
+                DBHelper.Instance.CreateStudent(student);
+                return Json(new { success = "Студент успешно добавлен" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { errors = ex.Message });
+            }
+        }
+
+        // GET: Students/DeleteStudent
+        [Role(Access = Classes.Roles.Teacher)]
+        public ActionResult DeleteStudent(int Id)
+        {
+            try
+            {
+                DBHelper.Instance.DeleteStudent(Id);
+                return Json(new { success = "Студент успешно удален" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { errors = ex.Message, JsonRequestBehavior.AllowGet });
             }
         }
     }

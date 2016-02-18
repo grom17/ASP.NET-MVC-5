@@ -42,6 +42,9 @@
                 <input id="updateStudent" type="button" value="Обновить" class="btn btn-default"
                        data-loading-msg="Обновление данных студента" 
                        onclick="studentDetailFormSubmit()"/>
+                <input id="deleteStudent" type="button" value="Удалить" class="btn btn-default"
+                       data-loading-msg="Удаление студента"
+                       onclick="StudentDelete()" data-action-url="@Url.Action("DeleteStudent")" />
             </div>
         </div>
     }

@@ -141,6 +141,25 @@ function studentDetailFormSubmit()
     }
 }
 
+function StudentDelete() {
+    div = $("#deleteStudent");
+    LoadingState(true, div);
+    LoadingStateMessage(div, div);
+    $.ajax({
+        url: div.data("action-url"),
+        data: {
+                Id: $("#StudentId").val() }
+        ,
+        success: function (result) {
+            OnSuccessDeleteStudent(result);
+        },
+        error: AjaxCommonErrorHandling,
+        complete: function (req, status) {
+            LoadingState(false, div);
+        }
+    });
+}
+
 function OnBeginUpdateStudent() {
     LoadingState(true);
     LoadingStateMessage($("#updateStudent"));
@@ -237,4 +256,11 @@ function OnSuccessCreateStudent(result) {
 }
 function OnCompleteCreateStudent(result) {
     LoadingState(false);
+}
+
+function OnSuccessDeleteStudent(result) {
+    AjaxCommonSuccessHandling(result, function () {
+        SetNeedRefresh();
+        BackToList();
+    });
 }

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace SimpleStudentsWebsite.Controllers
 {
@@ -7,11 +8,13 @@ namespace SimpleStudentsWebsite.Controllers
         // GET: Error
         public ActionResult Index()
         {
-            //var exception = Server != null ? Server.GetLastError() : null;
-            //if (exception != null)
-            //    return View(exception);
-            //return RedirectToPrevious();
-            return View();
+            var exception = TempData["Exception"] as Exception;
+            if (exception == null)
+            {
+                exception = Server != null ? Server.GetLastError() : null;
+                return exception != null ? View(exception) : RedirectToPrevious();
+            }
+            return View(exception);
         }
 
         [HttpPost, ValidateInput(false)]
@@ -21,18 +24,18 @@ namespace SimpleStudentsWebsite.Controllers
             return Json(true);
         }
 
-        //public ActionResult Unauthorized()
-        //{
-        //    if (Response.StatusCode == 403)
-        //        return View();
-        //    return RedirectToPrevious();
-        //}
+        public ActionResult Unauthorized()
+        {
+            if (Response.StatusCode == 403)
+                return View();
+            return RedirectToPrevious();
+        }
 
-        //public ActionResult NotFound()
-        //{
-        //    if (Response.StatusCode == 404)
-        //        return View();
-        //    return RedirectToPrevious();
-        //}
+        public ActionResult NotFound()
+        {
+            if (Response.StatusCode == 404)
+                return View();
+            return RedirectToPrevious();
+        }
     }
 }
