@@ -61,7 +61,8 @@ namespace SimpleStudentsWebsite.Controllers
                 var studentGrades = new List<StudentGradesModel>();
                 if (Id != 0 ) 
                     studentGrades = DBHelper.Instance.GetStudentGradesList(Id);
-                return PartialView("StudentGrades", studentGrades);
+                return Content(GlobalHelper.Json(studentGrades));
+                //return PartialView("StudentGrades", studentGrades);
             }
             catch (Exception ex)
             {

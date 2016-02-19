@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Simple Students Website</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/datatables")
     @Styles.Render("~/Content/bootstrap")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -51,6 +52,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/datatables")
     @Scripts.Render("~/bundles/noty")
     @Scripts.Render("~/bundles/common")
     @RenderSection("scripts", required: false)

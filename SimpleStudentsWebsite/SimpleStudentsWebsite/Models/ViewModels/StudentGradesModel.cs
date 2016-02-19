@@ -5,10 +5,8 @@ namespace SimpleStudentsWebsite.Models.ViewModels
 {
     public class StudentGradesModel
     {
-        [CustomDisplayName("StudentId")]
-        public int StudentId { get; set; }
-        [CustomDisplayName("TeacherId")]
         public int TeacherId { get; set; }
+        public bool IsTeacher { get; set; }
         [CustomDisplayName("TeacherFullName")]
         public string TeacherFullName { get; set; }
         [CustomDisplayName("Subject")]

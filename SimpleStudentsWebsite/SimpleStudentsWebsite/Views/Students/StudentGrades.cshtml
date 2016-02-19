@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<StudentGradesModel>
 <br />
-<table id="studentGradesList" class="slimtable">
+<table id="studentGradesList" class="display" cellspacing="0" width="100%">
     <thead>
         <tr align="center">
             <th width="5%">
-                @Html.DisplayNameFor(model => model.TeacherId)
+                @*@Html.DisplayNameFor(model => model.TeacherId)*@
             </th>
             <th width="50%">
                 @Html.DisplayNameFor(model => model.TeacherFullName)
@@ -17,13 +17,28 @@
             </th>
         </tr>
     </thead>
+    <tfoot>
+        <tr align="center">
+            <th>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeacherFullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subject)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grade)
+            </th>
+        </tr>
+    </tfoot>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
                 <td>
                     <input type="hidden" value="@item.TeacherId" name="TeacherId" />
-                    @Html.DisplayFor(modelItem => item.TeacherId)
+                    @*@Html.DisplayFor(modelItem => item.TeacherId)*@
                 </td>
                 <td>
                     <input type="hidden" value="@item.TeacherFullName" name="TeacherFullName" />

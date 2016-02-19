@@ -32,18 +32,84 @@ function LoadStudentGrades(Id) {
         success: function (res) {
             AjaxCommonSuccessHandling(res, function () {
                 div.html(res);
-                $("#studentGradesList").slimtable({
-                    colSettings:
-                        [{
-                            colNumber: 3, enableSort: false
-                        }]
-                });
+                ApplySelectableDataTable("studentGradesList");
             });
         },
         error: AjaxCommonErrorHandling,
         complete: function (req, status) {
             LoadingState(false, div);
         }
+    });
+}
+
+function ApplySelectableDataTable(tableName)
+{
+    // Setup - add a text input to each footer cell
+    $('#' + tableName + ' tfoot th').each(function (i) {
+        if (i > 0) {
+            var title = $(this).text();
+            $(this).html('<input type="search" class="form-control input-sm" placeholder="' + title + '" />');
+        }
+    });
+
+    var selected = [];
+    $('#' + tableName + ' tbody').on('click', 'tr', function () {
+        var id = this.id;
+        var index = $.inArray(id, selected);
+
+        if (index === -1) {
+            selected.push(id);
+        } else {
+            selected.splice(index, 1);
+        }
+
+        $(this).toggleClass('selected');
+    });
+
+    $('#' + tableName).DataTable({
+        columnDefs: [{
+            orderable: false,
+            className: 'select-checkbox',
+            targets: 0
+        }],
+        select: {
+            style: 'multi',
+            selector: 'td:first-child'
+        },
+        order: [[1, 'asc']],
+        lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Все"]],
+        pageLength: 20,
+        rowCallback: function( row, data ) {
+            if ( $.inArray(data.TeacherId, selected) !== -1 ) {
+                $(row).addClass('selected');
+            }
+        },
+        initComplete: function (settings, json) {
+            var r = $('#' + tableName + ' tfoot tr');
+            r.find('th').each(function (i) {
+                if (i > 0) {
+                    $(this).css('padding', 8);
+                }
+            });
+            $('#' + tableName + ' thead').append(r);
+            $('#search_0').css('text-align', 'center');
+        }
+    });
+
+    // DataTable
+    var table = $('#' + tableName).DataTable();
+
+    // Apply the search
+    table.columns().every(function () {
+        var that = this;
+
+        $('input', this.footer()).on('keyup change', function () {
+            if (that.search() !== this.value) {
+                that
+                    .search(this.value)
+                    .draw();
+            }
+        });
     });
 }
 

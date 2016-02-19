@@ -15,6 +15,9 @@ namespace SimpleStudentsWebsite
                         "~/Scripts/Common", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/noty").IncludeDirectory(
+                        "~/Scripts/DataTables", "*.js", true));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatables").IncludeDirectory(
                         "~/Scripts/noty", "*.js", true));
 
             bundles.Add(new ScriptBundle("~/bundles/login").IncludeDirectory(
@@ -44,6 +47,9 @@ namespace SimpleStudentsWebsite
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
                       "~/Content/Bootstrap","*.css",true));
+
+            bundles.Add(new StyleBundle("~/Content/datatables").IncludeDirectory(
+                      "~/Content/DataTables", "*.css", true));
         }
     }
 }

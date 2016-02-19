@@ -207,14 +207,15 @@ namespace SimpleStudentsWebsite.Classes.Helpers
                 var grades = (from tch in db.Teachers
                                 join jr in db.Journal
                                 on tch.TeacherId equals jr.TeacherId
-                                where jr.StudentId == Id
+                                //where jr.StudentId == Id
                                 group jr by tch.TeacherId into grp
                                 select new StudentGradesModel
                                 {
                                     TeacherId = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
                                     TeacherFullName = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
+                                    IsTeacher = grp.Where(x => x.StudentId.Equals(Id)).Select(x=>x.StudentId).FirstOrDefault() == Id,
                                     Subject = grp.Select(s=>s.Teachers.Subject).FirstOrDefault(),
-                                    Grade = grp.Select(g => g.Grade).FirstOrDefault()
+                                    Grade = grp.Where(x=>x.StudentId.Equals(Id)).Select(x => x.Grade).FirstOrDefault()
                                 }).ToList();
                 if (grades != null)
                     return grades;
