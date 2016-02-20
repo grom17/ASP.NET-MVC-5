@@ -22,6 +22,12 @@ namespace SimpleStudentsWebsite.Classes.Attributes
                     !CookieHelper.Instance.Role.HasFlag(Roles.Teacher))
                     filterContext.HttpContext.Response.StatusCode = 403;
             }
+            if (Access == (Roles.Teacher | Roles.Dean))
+            {
+                if (!CookieHelper.Instance.Role.HasFlag(Roles.Teacher) &&
+                    !CookieHelper.Instance.Role.HasFlag(Roles.Dean))
+                    filterContext.HttpContext.Response.StatusCode = 403;
+            }
             else if (!CookieHelper.Instance.Role.HasFlag(Access))
                 filterContext.HttpContext.Response.StatusCode = 403;
         }

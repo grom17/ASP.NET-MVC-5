@@ -1,11 +1,16 @@
-﻿@model NewStudent
-@using (Ajax.BeginForm("CreateStudent", new { }, new AjaxOptions() { },
-        new { Id = "newStudentForm", @class = "form-horizontal", role = "form" }))
+﻿@model NewTeacher
+@using (Ajax.BeginForm("CreateTeacher", new { }, new AjaxOptions() {
+        OnBegin = "OnBeginCreateTeacher", OnComplete = "OnCompleteCreateTeacher",
+        OnSuccess = "OnSuccessCreateTeacher", OnFailure = "AjaxCommonErrorHandling", HttpMethod = "POST"
+    },
+    new { Id = "newTeacherForm", @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    // TODO: Get all text messages from messages.xml
 
+    // TODO: Make one form for teacher/student creation
 
-        <h4>Добавить студента</h4>
+        <h4>Добавить преподавателя</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -25,6 +30,14 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             @Html.LabelFor(model => model.Login, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control" } })
@@ -33,13 +46,12 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.SecretKey, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SecretKey, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SecretKey, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -47,24 +59,21 @@
                 @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div id="newStudentGrades" data-action-url="@Url.Action("LoadStudentGrades")" data-loading-msg="Загрузка оценок">
-            <table id="newStudentGradesList" class="display" cellspacing="0">
+
+        <div id="newTeacherStudents" data-action-url="@Url.Action("LoadTeacherStudents")" data-loading-msg="Загрузка списка студентов">
+            <table id="newTeacherStudentsList" class="display" cellspacing="0">
                 <thead>
                     <tr>
                         <th></th>
-                        <th><input type="hidden" id="TeacherId"></th>
-                        <th>Преподаватель</th>
-                        <th>Предмет</th>
-                        <th>Оценка</th>
+                        <th><input type="hidden" id="StudentId"></th>
+                        <th>Студент</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
                         <th></th>
-                        <th>TeacherId</th>
-                        <th>Преподаватель</th>
-                        <th>Предмет</th>
-                        <th>Оценка</th>
+                        <th>StudentId</th>
+                        <th>Студент</th>
                     </tr>
                 </tfoot>
             </table>
@@ -72,14 +81,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input id="createStudentBtn" type="submit" value="Добавить" class="btn btn-default"
-                       data-loading-msg="Добавление студента"
-                       onclick="newStudentFormSubmit()" />
+                <input id="createTeacherBtn" type="button" value="Добавить" class="btn btn-default"
+                       data-loading-msg="Добавление преподавателя"
+                       onclick="newTeacherFormSubmit()" />
             </div>
         </div>
 }
 <br />
 <p>
-    <input id="backToList" type="button" value="Назад" class="btn btn-default"
-           onclick="BackToList()" />
+    <input id="backToTeachersList" type="button" value="Назад" class="btn btn-default"
+           onclick="BackToTeachersList()" />
 </p>

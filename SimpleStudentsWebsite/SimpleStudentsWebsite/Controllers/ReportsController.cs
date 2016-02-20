@@ -1,6 +1,6 @@
 ﻿using SimpleStudentsWebsite.Classes.Attributes;
 using SimpleStudentsWebsite.Classes.Helpers;
-using SimpleStudentsWebsite.Models.ViewModels;
+using SimpleStudentsWebsite.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;

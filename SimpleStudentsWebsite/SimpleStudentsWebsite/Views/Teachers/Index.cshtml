@@ -1,13 +1,17 @@
-﻿@model IEnumerable<TeacherModel>
-
-@{
+﻿@{
     ViewBag.Title = "Преподаватели";
 }
 
 <h2>Преподаватели</h2>
 
-<div id="teachersDiv" data-action-url="@Url.Action("ReadTeachers")" data-detail-url="@Url.Action("TeacherDetail")" data-panel="teacherWindow" data-loading-msg="Загрузка списка преподавателей">
-    @Html.Partial("TeachersList", new List<TeacherModel>().AsEnumerable())
+<div id="newTeacherDiv" class="hidden" data-action-url="@Url.Action("PrepareCreateTeacher")" data-loading-msg="Загрузка карточки нового преподавателя">
+</div>
+
+<div id="teachersDiv" class="hidden" data-action-url="@Url.Action("ReadTeachers")" data-detail-url="@Url.Action("TeacherDetail")" data-panel="teacherWindow" data-loading-msg="Загрузка списка преподавателей">
+    @{Html.RenderPartial("TeachersList"); }
+</div>
+
+<div id="teacherDetailsDiv" class="hidden" data-detail-url="@Url.Action("TeacherDetails")" data-loading-msg="Загрузка профиля преподавателя">
 </div>
 
 @section scripts

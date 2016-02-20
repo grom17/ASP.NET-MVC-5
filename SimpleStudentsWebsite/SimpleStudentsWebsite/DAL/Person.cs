@@ -21,7 +21,9 @@ namespace SimpleStudentsWebsite.DAL
         public string Login { get; set; }
 
         [Required]
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "{0} должен быть не менее {2} символов длиной", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [CustomDisplayName("Password")]
         public string Password { get; set; }
 
         public string Fullname

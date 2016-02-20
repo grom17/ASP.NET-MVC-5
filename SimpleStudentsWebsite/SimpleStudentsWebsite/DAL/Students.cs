@@ -1,4 +1,3 @@
-using SimpleStudentsWebsite.Models.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace SimpleStudentsWebsite.DAL

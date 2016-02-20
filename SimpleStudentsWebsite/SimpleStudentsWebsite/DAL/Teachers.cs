@@ -1,3 +1,4 @@
+using SimpleStudentsWebsite.Classes.Attributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 namespace SimpleStudentsWebsite.DAL
@@ -14,6 +15,7 @@ namespace SimpleStudentsWebsite.DAL
         public int TeacherId { get; set; }
 
         [StringLength(200)]
+        [CustomDisplayName("Subject")]
         public string Subject { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

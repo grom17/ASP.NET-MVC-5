@@ -1,5 +1,5 @@
-﻿namespace SimpleStudentsWebsite.Models.ViewModels
-{
+﻿namespace SimpleStudentsWebsite.Models
+{ 
     public class ReportModel
     {
         public int Id { get; set; }

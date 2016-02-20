@@ -1,14 +1,14 @@
-﻿function StudentDelete(Id) {
-    // TODO: Add confirm message before delete student
-    btn = $("#deleteStudent");
-    div = $("#studentDetailForm");
+﻿function TeacherDelete(Id) {
+    // TODO: Add confirm message before delete teacher
+    btn = $("#deleteTeacher");
+    div = $("#teacherDetailForm");
     LoadingState(true, div);
     LoadingStateMessage(btn, div);
     $.ajax({
         url: btn.data("action-url"),
         data: { Id: Id},
         success: function (result) {
-            OnSuccessDeleteStudent(result);
+            OnSuccessDeleteTeacher(result);
         },
         error: AjaxCommonErrorHandling,
         complete: function (req, status) {
@@ -17,10 +17,11 @@
     });
 }
 
-function OnSuccessDeleteStudent(result) {
+function OnSuccessDeleteTeacher(result) {
     AjaxCommonSuccessHandling(result, function () {
+        //$('#teacherStudentsList').dataTable().fnDestroy();
         updateDBInfo();
-        SetNeedRefresh();
-        BackToList();
+        SetNeedRefreshTeachers();
+        BackToTeachersList();
     });
 }

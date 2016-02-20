@@ -42,7 +42,8 @@ namespace SimpleStudentsWebsite
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css",
-                      "~/Content/slimtable.css", 
+                      "~/Content/slimtable.css",
+                      "~/Content/font-awesome.css",
                       "~/Content/fSelect.css"));
 
             bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(

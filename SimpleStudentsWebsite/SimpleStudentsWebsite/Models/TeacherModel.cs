@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SimpleStudentsWebsite.Models.ViewModels
+namespace SimpleStudentsWebsite.Models
 {
     public class TeacherModel : PersonModel
     {

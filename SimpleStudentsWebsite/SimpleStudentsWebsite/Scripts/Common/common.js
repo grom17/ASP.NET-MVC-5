@@ -45,7 +45,7 @@ function AjaxCommonSuccessHandling(result, onsuccess) {
             ShowSuccess(result.success);
         }
         if (typeof result === "string" && result.indexOf("account-login") != -1) {
-            window.location = "~/Account/Login";
+            window.location = "Account/Login";
         } else {
             var html = result;
             if (result.html) {

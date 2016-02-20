@@ -1,10 +1,11 @@
 ﻿using SimpleStudentsWebsite.Classes.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace SimpleStudentsWebsite.Models.ViewModels
+namespace SimpleStudentsWebsite.Models
 {
     public class StudentGradesModel
     {
+        public int StudentId { get; set; }
         public int TeacherId { get; set; }
         public bool IsTeacher { get; set; }
         [CustomDisplayName("TeacherFullName")]

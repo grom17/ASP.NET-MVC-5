@@ -4,9 +4,6 @@ using SimpleStudentsWebsite.Classes.Helpers;
 using System.Threading;
 using System.Security.Principal;
 using System.Web.Security;
-using SimpleStudentsWebsite.Classes.Attributes;
-using System.Collections.Generic;
-using SimpleStudentsWebsite.Models.ViewModels;
 using System;
 
 namespace SimpleStudentsWebsite.Controllers

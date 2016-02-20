@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -175,6 +179,7 @@
     <Compile Include="Classes\Helpers\EnumHelper.cs" />
     <Compile Include="Classes\Helpers\GlobalHelper.cs" />
     <Compile Include="Classes\Attributes\RoleAttribute.cs" />
+    <Compile Include="Classes\Helpers\MapperHelper.cs" />
     <Compile Include="Classes\Messages.cs" />
     <Compile Include="Classes\Roles.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -191,13 +196,15 @@
     </Compile>
     <Compile Include="DAL\Journal.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\NewTeacher.cs" />
     <Compile Include="Models\NewStudent.cs" />
-    <Compile Include="Models\ViewModels\PersonModel.cs" />
+    <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\ViewModels\ReportModel.cs" />
-    <Compile Include="Models\ViewModels\StudentGradesModel.cs" />
-    <Compile Include="Models\ViewModels\TeacherModel.cs" />
-    <Compile Include="Models\ViewModels\StudentModel.cs" />
+    <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\TeacherStudentsModel.cs" />
+    <Compile Include="Models\StudentGradesModel.cs" />
+    <Compile Include="Models\TeacherModel.cs" />
+    <Compile Include="Models\StudentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DAL\SSW_DB_Model.cs" />
     <Compile Include="Startup.cs" />
@@ -213,17 +220,14 @@
     <Content Include="Content\DataTables\dataTables.bootstrap.css" />
     <Content Include="Content\DataTables\jquery.dataTables.css" />
     <Content Include="Content\DataTables\select.bootstrap.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\fonts\fontawesome-webfontba_easishare.svg" />
     <Content Include="Content\fSelect.css" />
     <Content Include="Content\images\arrows.png" />
     <Content Include="Content\Bootstrap\bootstrap-quick-search.css" />
     <Content Include="Content\Bootstrap\images\glyphicons-halflings-white.png" />
     <Content Include="Content\Bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Content\images\loading-image.gif" />
-    <Content Include="Content\images\sort_asc.png" />
-    <Content Include="Content\images\sort_asc_disabled.png" />
-    <Content Include="Content\images\sort_both.png" />
-    <Content Include="Content\images\sort_desc.png" />
-    <Content Include="Content\images\sort_desc_disabled.png" />
     <Content Include="Content\slimtable.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
@@ -269,6 +273,10 @@
     <Content Include="Content\Bootstrap\bootstrap.css.map" />
     <Content Include="Content\Bootstrap\bootstrap-theme.min.css.map" />
     <Content Include="Content\Bootstrap\bootstrap-theme.css.map" />
+    <Content Include="Content\fonts\fontawesome-webfontba_easishare.eot" />
+    <Content Include="Content\fonts\fontawesome-webfontba_easishare.otf" />
+    <Content Include="Content\fonts\fontawesome-webfontba_easishare.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfontba_easishare.woff" />
     <None Include="Properties\PublishProfiles\My.pubxml" />
     <None Include="Scripts\JQuery\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\Common\dbInfo.js" />
@@ -316,8 +324,11 @@
     <Content Include="Scripts\Students\deleteStudent.js" />
     <Content Include="Scripts\Students\newStudent.js" />
     <Content Include="Scripts\Students\studentDetails.js" />
+    <Content Include="Scripts\Teachers\deleteTeacher.js" />
     <Content Include="Scripts\Teachers\index.js" />
     <Content Include="Scripts\Students\index.js" />
+    <Content Include="Scripts\Teachers\newTeacher.js" />
+    <Content Include="Scripts\Teachers\teacherDetails.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -341,12 +352,12 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Shared\TeachersList.cshtml" />
     <Content Include="Views\Students\StudentDetails.cshtml" />
-    <Content Include="Views\Students\StudentGrades.cshtml" />
-    <Content Include="Views\Students\TeachersList.cshtml" />
     <Content Include="Views\Students\NewStudent.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
+    <Content Include="Views\Teachers\NewTeacher.cshtml" />
+    <Content Include="Views\Teachers\TeacherDetails.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

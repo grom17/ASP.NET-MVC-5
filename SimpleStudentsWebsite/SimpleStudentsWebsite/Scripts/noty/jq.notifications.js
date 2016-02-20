@@ -37,42 +37,38 @@ function MessageConfirm(qtext, posClick, negClick) {
         ShowConfirm(qtext, posClick, negClick);
     }, 0);
 }
-function ShowConfirm(qtext, posClick, negClick, textboxConfirmMessage) {
-    var successClick = function () {
-        posClick();
+function ShowConfirm(text, posClick, negClick, currentValue) {
+    successClick = function () {
+        var tb = $("#GradeTb");
+        var tbValue = parseInt(tb.val());
+        if (tbValue <= 5 && tbValue >= 1) {
+            NotificationDisableClose = false;
+            posClick(tbValue);
+        } else {
+            ShowError('Допустимое значение от 1 до 5');
+        }
     };
-    if (textboxConfirmMessage) {
-        successClick = function () {
-            var tb = $("#ConfirmDisable");
-            var tbValue = ("" + tb.val());
-            if (tbValue.toLowerCase() == textboxConfirmMessage.toLowerCase()) {
-                NotificationDisableClose = false; 
-                posClick();
-            } else {
-                tb.removeClass('valid').addClass('input-validation-error').next().removeClass('field-validation-valid').addClass('field-validation-error');
-            }
-        };
-    }
     noty({
         layout: 'center',
         theme: 'defaultTheme',
         modal: true,
-        text: qtext,
+        text: text,
         animation: {
             open: { height: 'toggle' },
             close: { height: 'toggle' },
             easing: 'swing',
             speed: 0 // opening & closing animation speed
         },
-        buttons: [
-    { addClass: 'fa fa-yes', onClick: function ($noty) {
-        successClick();
-        if (!NotificationDisableClose) {
-            $noty.close();
+        buttons: [{
+            addClass: 'glyphicon glyphicon-ok', onClick: function ($noty) {
+            successClick();
+            if (!NotificationDisableClose) {
+                $noty.close();
+            }
         }
-    }
     },
-    { addClass: 'fa fa-no', onClick: function ($noty) {
+    {
+        addClass: 'glyphicon glyphicon-remove', onClick: function ($noty) {
         NotificationDisableClose = false;
         negClick();
         $noty.close();
@@ -80,12 +76,14 @@ function ShowConfirm(qtext, posClick, negClick, textboxConfirmMessage) {
     }
     ]
     });
-    if (textboxConfirmMessage) {
-        var textbox = $('<div class="confirm-controls"><input id="ConfirmDisable" name="ConfirmDisable" type="text" class="valid"/><span class="field-validation-valid">*</span></div>');
-        NotificationDisableClose = true;
-        $("#noty_center_layout_container").find('.noty_message').after(textbox);
-    }
-    $("#noty_center_layout_container").find('li').css({ width: '400px' });
+    var textboxString = '<input id="GradeTb" class="form-control input-sm' +
+                        (' name="GradeTb" value="{0}" type="text"/>'.format(currentValue));
+    var textbox = $(textboxString);
+    NotificationDisableClose = true;
+    $("#noty_center_layout_container").find('.noty_message').after(textbox);
+
+    $("#noty_center_layout_container").find('li').css({ width: '200px' });
+    $("#GradeTb").focus();
 }
 var NotificationDisableClose = false;
 $(document).ready(function () { $('body').click(function (e) { ClosePopupMessages(e) }) });

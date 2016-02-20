@@ -3,63 +3,24 @@
 <p>
     @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
     {
-        @Html.ActionLink("Добавить преподавателя", "CreateTeacher", "Dean")
+        <input class="btn btn-default" type="button" id="prepareCreateTeacher"
+               value="Добавить преподавателя" onclick="PrepareCreateTeacher()">
     }
 </p>
 
-<div class="form-group">
-<input class="form-control"
-       name="quick-search"
-       placeholder="Искать по ключевому слову..."
-       data-input="quick-search"
-       data-search-target="#teachers tbody > tr"
-       data-noresult-text="Нет результатов">
-</div>
-
-<table id="teachers" class="slimtable">
+<table id="teachers" class="display" width="100%" cellspacing="0">
     <thead>
         <tr>
-            <th width="40%">
-                @Html.DisplayNameFor(model => model.Fullname)
-            </th>
-            <th width="20%">
-                @Html.DisplayNameFor(model => model.StudentsCount)
-            </th>
-            @if (Request.IsAuthenticated &&
-                (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher) ||
-                CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean)))
-            {
-                <th width="40%"></th>
-            }
+            <th>TeacherId</th>
+            <th>Преподаватель</th>
+            <th>Студенты</th>
         </tr>
     </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
+    <tfoot>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fullname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StudentsCount)
-            </td>
-            
-                @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
-                {
-                    <td>
-                    @Html.ActionLink("Редактировать | ", "EditTeacher", "Dean", new { id = item.Id })
-                    @Html.ActionLink("Профиль | ", "TeacherDetails", new { id = item.Id })
-                    @Html.ActionLink("Удалить", "DeleteTeacher", "Dean", new { id = item.Id })
-                    </td>
-                }
-                @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
-                {
-                    <td>
-                    @Html.ActionLink("Профиль", "TeacherDetails", new { id = item.Id })
-                    </td>
-                }
+            <th>TeacherId</th>
+            <th>Преподаватель</th>
+            <th>Студенты</th>
         </tr>
-    }
-    </tbody>
+    </tfoot>
 </table>
-
