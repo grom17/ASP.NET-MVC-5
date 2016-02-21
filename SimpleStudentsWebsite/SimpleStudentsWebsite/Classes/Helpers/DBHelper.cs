@@ -83,6 +83,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         {
             try
             {
+                // Select all students from journal with average grade
                 var students = (from std in db.Students
                                 join jr in db.Journal
                                 on std.StudentId equals jr.StudentId
@@ -91,6 +92,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
                                 {
                                     Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
                                     Fullname = grp.Select(st => st.Students.LastName + " " + st.Students.FirstName).FirstOrDefault(),
+                                    // Grade can be null, then will be converted to double and become 0.
                                     NullableGrades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
                                 }).ToList();
                 // Find students without any teacher and include in list
@@ -116,6 +118,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             try
             {
                 List<TeacherModel> teachers = new List<TeacherModel>();
+                // Select all teachers from journal
                 teachers = (from tch in db.Teachers
                             join jr in db.Journal
                             on tch.TeacherId equals jr.TeacherId
@@ -144,6 +147,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             }
         }
 
+        // Get teachers without students
         public List<Teachers> GetFreeTeachers()
         {
             return db.Teachers
@@ -216,63 +220,74 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             }
         }
 
-        // Get student grades list
-        // contains all teachers/subjects but marked by IsTeacher flag for current student
-        // to allow to attach student to teacher(s) or remove
         public List<StudentGradesModel> GetStudentGradesList(int Id)
         {
             try
             {
-                List<StudentGradesModel> grades = new List<StudentGradesModel>();
-                // For the new student get list of all teachers (not from journal), IsTeacher is false for all
-                if (Id == 0)
-                {
-                    grades = (from th in db.Teachers
-                              select new StudentGradesModel
-                              {
-                                  StudentId = 0,
-                                  TeacherId = th.TeacherId,
-                                  TeacherFullName = th.LastName + " " + th.FirstName,
-                                  IsTeacher = false,
-                                  Subject = th.Subject,
-                                  Grade = 0
-                              }).ToList();
-                }
-                else
-                {
-                    grades = (from tch in db.Teachers
-                              join jr in db.Journal
-                              on tch.TeacherId equals jr.TeacherId
-                              group jr by tch.TeacherId into grp
-                              select new StudentGradesModel
-                              {
-                                  StudentId = Id,
-                                  TeacherId = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
-                                  TeacherFullName = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
-                                  IsTeacher = grp.Where(x => x.StudentId.Equals(Id)).Select(x => x.StudentId).FirstOrDefault() == Id,
-                                  Subject = grp.Select(s => s.Teachers.Subject).FirstOrDefault(),
-                                  Grade = grp.Where(x => x.StudentId.Equals(Id)).Select(x => x.Grade).FirstOrDefault()
-                              }).ToList();
-                    // Find teachers without any students and include in list
-                    var freeTeachers = GetFreeTeachers();
-                    freeTeachers.ForEach(x => grades.Add(new StudentGradesModel()
-                    {
-                        StudentId = Id,
-                        TeacherId = x.TeacherId,
-                        TeacherFullName = x.LastName + " " + x.FirstName,
-                        IsTeacher = false,
-                        Subject = x.Subject,
-                        Grade = 0
-                    }));
-                }
-                if (grades != null)
-                    return grades;
-                return new List<StudentGradesModel>();
+                // List of teachers
+                List<Teachers>  teachers = db.Teachers.ToList();
+                // List of teachers without students
+                List<Teachers> freeTeachers = GetFreeTeachers();
+                // List of grades
+                List<Journal> journal = db.Journal.ToList();
+                return GetStudentGradesList(teachers, freeTeachers, journal, Id);
             }
             catch (Exception ex)
             {
                 throw new DBException("GetStudentGradesList(): ", ex.ToString());
             }
+        }
+
+        // Get student grades list
+        // contains all teachers/subjects but marked by IsTeacher flag for current student
+        // to allow to attach student to teacher(s) or remove
+        public List<StudentGradesModel> GetStudentGradesList(List<Teachers> teachers, List<Teachers> freeTeachers, List<Journal> journal, int Id)
+        {
+            List<StudentGradesModel> grades = new List<StudentGradesModel>();
+            // For the new student get list of all teachers (not from journal), IsTeacher is false for all
+            if (Id == 0)
+            {
+                grades = (from th in teachers
+                          select new StudentGradesModel
+                          {
+                              StudentId = 0,
+                              TeacherId = th.TeacherId,
+                              TeacherFullName = th.LastName + " " + th.FirstName,
+                              IsTeacher = false,
+                              Subject = th.Subject,
+                              Grade = 0
+                          }).ToList();
+            }
+            else
+            {
+                // Select all teachers from journal
+                grades = (from tch in teachers
+                          join jr in journal
+                          on tch.TeacherId equals jr.TeacherId
+                          group jr by tch.TeacherId into grp
+                          select new StudentGradesModel
+                          {
+                              StudentId = Id,
+                              TeacherId = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
+                              TeacherFullName = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
+                              IsTeacher = grp.Where(x => x.StudentId.Equals(Id)).Select(x => x.StudentId).FirstOrDefault() == Id,
+                              Subject = grp.Select(s => s.Teachers.Subject).FirstOrDefault(),
+                              Grade = grp.Where(x => x.StudentId.Equals(Id)).Select(x => x.Grade).FirstOrDefault()
+                          }).ToList();
+                // Include teachers without any students in list
+                freeTeachers.ForEach(x => grades.Add(new StudentGradesModel()
+                {
+                    StudentId = Id,
+                    TeacherId = x.TeacherId,
+                    TeacherFullName = x.LastName + " " + x.FirstName,
+                    IsTeacher = false,
+                    Subject = x.Subject,
+                    Grade = 0
+                }));
+            }
+            if (grades != null)
+                return grades;
+            return new List<StudentGradesModel>();
         }
 
         // Get teacher students list
@@ -326,6 +341,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             }
         }
 
+        // Get students belongs to no one teacher
         public List<Students> GetFreeStudents()
         {
             return db.Students
@@ -525,6 +541,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             if (student != null)
             {
                 db.Entry(student).State = EntityState.Deleted;
+                // Remove all dependencies 
                 foreach (var jr in db.Journal.Local.ToList())
                 {
                     if (jr.Students == null)
@@ -543,6 +560,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             if (teacher != null)
             {
                 db.Entry(teacher).State = EntityState.Deleted;
+                // Remove all dependencies 
                 foreach (var jr in db.Journal.Local.ToList())
                 {
                     if (jr.Teachers == null)
