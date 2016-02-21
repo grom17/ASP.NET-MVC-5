@@ -40,6 +40,5 @@ function OnCompleteCreateTeacher() {
     LoadingState(false, $("#newTeacherForm"));
     updateDBInfo();
     SetNeedRefreshTeachers();
-    //$('#newTeacherStudentsList').dataTable().fnDestroy();
     BackToTeachersList();
 }

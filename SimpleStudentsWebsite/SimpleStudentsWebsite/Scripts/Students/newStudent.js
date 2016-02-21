@@ -1,8 +1,8 @@
 ﻿function PrepareCreateStudent() {
     $("#studentsDiv").addClass("hidden");
     var div = $("#newStudentDiv");
-    LoadingState(true, div);
-    LoadingStateMessage(div, div);
+    LoadingState(true);
+    LoadingStateMessage(div);
     $.ajax({
         url: div.data("action-url"),
         success: function (res) {
@@ -16,7 +16,7 @@
         },
         error: AjaxCommonErrorHandling,
         complete: function (req, status) {
-            LoadingState(false,div);
+            LoadingState(false);
         }
     });
 }
@@ -24,20 +24,8 @@
 function newStudentFormSubmit() {
     // TODO: Add check: if teacher selected but grade textbox is empty show error msg
     // TODO: Add check: if no one teacher was selected show error msg
-    if ($("#newStudentForm").valid()) {
-        OnBeginCreateStudent();
-        $.ajax({
-            url: "/Students/CreateStudent",
-            type: "POST",
-            data:{
-                FirstName: $("#FirstName").val(),
-                LastName: $("#LastName").val(),
-                Login: $("#Login").val(),
-                Password: $("#SecretKey").val()
-            },
-            success: function (result) { OnSuccessCreateStudent(result) },
-            error: AjaxCommonErrorHandling
-        });   
+    if ($("#newStudentForm").valid()) {  
+        $("#newStudentForm").trigger('submit');
     }
 }
 

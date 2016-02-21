@@ -24,32 +24,7 @@
 function teacherDetailFormSubmit() {
     addValidator("teacherDetailForm");
     if ($("#teacherDetailForm").valid()) {
-        // If form valid set loading state
-        OnBeginUpdateTeacher();
-
-        // Updating teacher details
-        $.ajax({
-            // TODO: add url to div
-            url: "/Teachers/UpdateTeacherDetails",
-            type: "POST",
-            data:
-                {
-                    TeacherId: $("#TeacherId").val(),
-                    FirstName: $("#FirstName").val(),
-                    LastName: $("#LastName").val(),
-                    Login: $("#Login").val()
-                }
-            ,
-            success: function (result) {
-                AjaxCommonSuccessHandling(result, function () {
-                    UpdateTeacherStudents("teacherStudentsList", $("#TeacherId").val());
-                });
-            },
-            error: AjaxCommonErrorHandling,
-            complete: function (req, status) {
-                OnCompleteUpdateTeacher();
-            }
-        });
+        $("#teacherDetailForm").trigger('submit');
     }
 }
 
@@ -58,9 +33,15 @@ function OnBeginUpdateTeacher() {
     LoadingStateMessage($("#updateTeacher"));
 }
 
+function OnSuccessUpdateTeacher(result) {
+    AjaxCommonSuccessHandling(result, function () {
+        SetNeedRefreshTeachers();
+        UpdateTeacherStudents("teacherStudentsList", $("#TeacherId").val());
+    });
+}
+
 function OnCompleteUpdateTeacher() {
     LoadingState(false);
     updateDBInfo();
-    SetNeedRefreshTeachers();
     BackToTeachersList();
 }

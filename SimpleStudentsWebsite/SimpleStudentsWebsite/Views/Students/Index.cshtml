@@ -7,8 +7,15 @@
 <div id="newStudentDiv" class="hidden" data-action-url="@Url.Action("PrepareCreateStudent")" data-loading-msg="Загрузка карточки нового студента">
 </div>
 
-<div id="studentsDiv" data-action-url="@Url.Action("ReadStudents")" data-detail-url="@Url.Action("StudentDetail")" data-loading-msg="Загрузка списка студентов">
-    @Html.Partial("StudentsList", new List<StudentModel>().AsEnumerable())
+<div id="studentsDiv" class="hidden" data-action-url="@Url.Action("ReadStudents")" data-detail-url="@Url.Action("StudentDetail")" data-loading-msg="Загрузка списка студентов">
+    <p>
+        @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
+        {
+            <input class="btn btn-default" type="button" id="prepareCreateStudent"
+                   value="Добавить студента" onclick="PrepareCreateStudent()">
+        }
+    </p>
+    @{Html.RenderPartial("StudentsList"); }
 </div>
 
 <div id="studentDetailsDiv" class="hidden" data-detail-url="@Url.Action("StudentDetails")" data-loading-msg="Загрузка профиля студента">
@@ -16,5 +23,5 @@
 
 @section scripts
 {
-    @Scripts.Render("~/bundles/Students")
+    @Scripts.Render("~/bundles/students")
 }

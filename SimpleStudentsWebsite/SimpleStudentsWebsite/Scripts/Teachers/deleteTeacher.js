@@ -19,7 +19,6 @@
 
 function OnSuccessDeleteTeacher(result) {
     AjaxCommonSuccessHandling(result, function () {
-        //$('#teacherStudentsList').dataTable().fnDestroy();
         updateDBInfo();
         SetNeedRefreshTeachers();
         BackToTeachersList();

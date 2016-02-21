@@ -78,29 +78,45 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             return loginModel;
         }
 
-        // Get students array with average grade
-        public StudentModel[] GetStudentsArray()
+        // Get students list with average grade
+        public List<StudentModel> GetStudentsListWithAverageGrade()
         {
-            var students = (from std in db.Students
-                            join jr in db.Journal
-                            on std.StudentId equals jr.StudentId
-                            group jr by std.StudentId into grp
-                            select new StudentModel
-                            {
-                                Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
-                                Fullname = grp.Select(st => st.Students.LastName + " " + st.Students.FirstName).FirstOrDefault(),
-                                //Fullname = grp.Select(st => st.Students.Fullname).FirstOrDefault(),
-                                Grades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
-                            }).ToArray();
-            if (students != null)
-                return students;
-            throw new Exception("Ошибка получения списка студентов");
+            try
+            {
+                var students = (from std in db.Students
+                                join jr in db.Journal
+                                on std.StudentId equals jr.StudentId
+                                group jr by std.StudentId into grp
+                                select new StudentModel
+                                {
+                                    Id = grp.Select(st => st.Students.StudentId).FirstOrDefault(),
+                                    Fullname = grp.Select(st => st.Students.LastName + " " + st.Students.FirstName).FirstOrDefault(),
+                                    NullableGrades = grp.Where(g => g.Grade.HasValue && g.Grade.Value > 0).Select(g => g.Grade.Value).Average()
+                                }).ToList();
+                // Find students without any teacher and include in list
+                var freeStudents = GetFreeStudents();
+                freeStudents.ForEach(x => students.Add(new StudentModel()
+                {                   
+                    Id = x.StudentId,
+                    Fullname = x.LastName + " " + x.FirstName
+                }));
+                if (students != null)
+                    return students;
+                return new List<StudentModel>();
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("GetStudentsListWithAverageGrade(): ", ex.ToString());
+            }
         }
 
-        // Get teachers array with students count
-        public TeacherModel[] GetTeachersArray()
+        // Get teachers list with students count
+        public List<TeacherModel> GetTeachersListWithStudentsCount()
         {
-            var teachers = (from tch in db.Teachers
+            try
+            {
+                List<TeacherModel> teachers = new List<TeacherModel>();
+                teachers = (from tch in db.Teachers
                             join jr in db.Journal
                             on tch.TeacherId equals jr.TeacherId
                             group jr by tch.TeacherId into grp
@@ -109,23 +125,31 @@ namespace SimpleStudentsWebsite.Classes.Helpers
                                 Id = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
                                 Fullname = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
                                 StudentsCount = grp.Count()
-                            }).ToArray();
-            if (teachers != null)
-                return teachers;
-            throw new Exception("Ошибка получения списка преподавателей");
-        }
-
-        // Get students with average grades list
-        public List<StudentModel> GetStudentsList()
-        {
-            try
-            {
-                return GetStudentsArray().ToList();
+                            }).ToList();
+                // Find teachers without any student and include in list
+                var freeTeachers = GetFreeTeachers();
+                freeTeachers.ForEach(x => teachers.Add(new TeacherModel()
+                {
+                    Id = x.TeacherId,
+                    StudentsCount = 0,
+                    Fullname = x.LastName + " " + x.FirstName
+                }));
+                if (teachers != null)
+                    return teachers;
+                return new List<TeacherModel>();
             }
             catch (Exception ex)
             {
-                throw new DBException("GetStudentsList(): ", ex.ToString());
-            }        
+                throw new DBException("GetTeachersList(): ", ex.ToString());
+            }
+        }
+
+        public List<Teachers> GetFreeTeachers()
+        {
+            return db.Teachers
+                    .Where(s => !db.Journal
+                    .Select(j => j.TeacherId)
+                    .Contains(s.TeacherId)).ToList();
         }
 
         // Get student details
@@ -149,25 +173,14 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         {
             try
             {
-                return GetStudentsArray()
-                        .Where(x => x.Grades >= db.Journal.Select(g => g.Grade).Average()).ToList();
+                var students = GetStudentsListWithAverageGrade();
+                if (students.Count > 0)
+                    return students.Where(x => x.Grades >= db.Journal.Select(g => g.Grade).Average()).ToList();
+                return students;
             }
             catch (Exception ex)
             {
                 throw new DBException("GetBestStudentsList(): ", ex.ToString());
-            }
-        }
-
-        // Get all teachers list
-        public List<TeacherModel> GetTeachersList()
-        {
-            try
-            {
-                return GetTeachersArray().ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new DBException("GetTeachersList(): ", ex.ToString());
             }
         }
 
@@ -176,7 +189,7 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         {
             try
             {
-                return GetTeachersArray().Where(x => x.StudentsCount == db.Students.Count()).ToList();
+                return GetTeachersListWithStudentsCount().Where(x => x.StudentsCount == db.Students.Count()).ToList();
             }
             catch (Exception ex)
             {
@@ -189,8 +202,13 @@ namespace SimpleStudentsWebsite.Classes.Helpers
         {
             try
             {
-                var averageCountOfStudents = GetTeachersArray().Select(x => x.StudentsCount).Average();
-                return GetTeachersArray().Where(x => x.StudentsCount < averageCountOfStudents).ToList();
+                var teachers = GetTeachersListWithStudentsCount();
+                if (teachers != null && teachers.Count > 0)
+                {
+                    var averageCountOfStudents = teachers.Select(x => x.StudentsCount).Average();
+                    return teachers.Where(x => x.StudentsCount < averageCountOfStudents).ToList();
+                }
+                return new List<TeacherModel>();
             }
             catch (Exception ex)
             {
@@ -206,24 +224,50 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             try
             {
                 List<StudentGradesModel> grades = new List<StudentGradesModel>();
-                // For the new student grades will be null and IsTeacher always false
-                grades = (from tch in db.Teachers
-                                join jr in db.Journal
-                                on tch.TeacherId equals jr.TeacherId
-                                //where jr.StudentId == Id
-                                group jr by tch.TeacherId into grp
-                                select new StudentGradesModel
-                                {
-                                    StudentId = Id,
-                                    TeacherId = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
-                                    TeacherFullName = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
-                                    IsTeacher = Id != 0 ? grp.Where(x => x.StudentId.Equals(Id)).Select(x=>x.StudentId).FirstOrDefault() == Id : false,
-                                    Subject = grp.Select(s=>s.Teachers.Subject).FirstOrDefault(),
-                                    Grade = Id != 0 ? grp.Where(x=>x.StudentId.Equals(Id)).Select(x => x.Grade).FirstOrDefault() : null
-                                }).ToList();
+                // For the new student get list of all teachers (not from journal), IsTeacher is false for all
+                if (Id == 0)
+                {
+                    grades = (from th in db.Teachers
+                              select new StudentGradesModel
+                              {
+                                  StudentId = 0,
+                                  TeacherId = th.TeacherId,
+                                  TeacherFullName = th.LastName + " " + th.FirstName,
+                                  IsTeacher = false,
+                                  Subject = th.Subject,
+                                  Grade = 0
+                              }).ToList();
+                }
+                else
+                {
+                    grades = (from tch in db.Teachers
+                              join jr in db.Journal
+                              on tch.TeacherId equals jr.TeacherId
+                              group jr by tch.TeacherId into grp
+                              select new StudentGradesModel
+                              {
+                                  StudentId = Id,
+                                  TeacherId = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
+                                  TeacherFullName = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
+                                  IsTeacher = grp.Where(x => x.StudentId.Equals(Id)).Select(x => x.StudentId).FirstOrDefault() == Id,
+                                  Subject = grp.Select(s => s.Teachers.Subject).FirstOrDefault(),
+                                  Grade = grp.Where(x => x.StudentId.Equals(Id)).Select(x => x.Grade).FirstOrDefault()
+                              }).ToList();
+                    // Find teachers without any students and include in list
+                    var freeTeachers = GetFreeTeachers();
+                    freeTeachers.ForEach(x => grades.Add(new StudentGradesModel()
+                    {
+                        StudentId = Id,
+                        TeacherId = x.TeacherId,
+                        TeacherFullName = x.LastName + " " + x.FirstName,
+                        IsTeacher = false,
+                        Subject = x.Subject,
+                        Grade = 0
+                    }));
+                }
                 if (grades != null)
                     return grades;
-                throw new Exception("Ошибка получения списка оценок");
+                return new List<StudentGradesModel>();
             }
             catch (Exception ex)
             {
@@ -239,26 +283,55 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             try
             {
                 List<TeacherStudentsModel> students = new List<TeacherStudentsModel>();
-                // For the new student grades will be null and IsTeacher always false
-                students = (from std in db.Students
-                          join jr in db.Journal
-                          on std.StudentId equals jr.StudentId
-                          group jr by std.StudentId into grp
-                          select new TeacherStudentsModel
-                          {
-                              TeacherId = Id,
-                              StudentId = grp.Select(x => x.Students.StudentId).FirstOrDefault(),
-                              StudentFullName = grp.Select(tc => tc.Students.LastName + " " + tc.Students.FirstName).FirstOrDefault(),
-                              IsStudent = Id != 0 ? grp.Where(x => x.TeacherId.Equals(Id)).Select(x => x.TeacherId).FirstOrDefault() == Id : false
-                          }).ToList();
+                // For the new teacher get list of all students (not from journal), IsStudent is false for all
+                if (Id == 0)
+                {
+                    students = (from std in db.Students
+                                select new TeacherStudentsModel
+                                {
+                                    TeacherId = Id,
+                                    StudentId = std.StudentId,
+                                    StudentFullName = std.LastName + " " + std.FirstName,
+                                    IsStudent = false
+                                }).ToList();
+                }
+                else
+                {
+                    students = (from std in db.Students
+                                join jr in db.Journal
+                                on std.StudentId equals jr.StudentId
+                                group jr by std.StudentId into grp
+                                select new TeacherStudentsModel
+                                {
+                                    TeacherId = Id,
+                                    StudentId = grp.Select(x => x.Students.StudentId).FirstOrDefault(),
+                                    StudentFullName = grp.Select(tc => tc.Students.LastName + " " + tc.Students.FirstName).FirstOrDefault(),
+                                    IsStudent = grp.Where(x => x.TeacherId.Equals(Id)).Select(x => x.TeacherId).FirstOrDefault() == Id
+                                }).ToList();
+                    // Find students without any teacher and include in list
+                    var freeStudents = GetFreeStudents();
+                    freeStudents.ForEach(x => students.Add(new TeacherStudentsModel()
+                    {
+                        TeacherId = Id, IsStudent = false,
+                        StudentId = x.StudentId, StudentFullName = x.LastName + " " + x.FirstName
+                    }));
+                }
                 if (students != null)
                     return students;
-                throw new Exception("Ошибка получения списка студентов");
+                return new List<TeacherStudentsModel>();
             }
             catch (Exception ex)
             {
                 throw new DBException("GetTeacherStudentsList(): ", ex.ToString());
             }
+        }
+
+        public List<Students> GetFreeStudents()
+        {
+            return db.Students
+                        .Where(s => !db.Journal
+                        .Select(j => j.StudentId)
+                        .Contains(s.StudentId)).ToList();
         }
 
         public void UpdateStudent(Students model)
@@ -282,7 +355,6 @@ namespace SimpleStudentsWebsite.Classes.Helpers
             try
             {
                 var teacher = db.Teachers.Where(t => t.TeacherId == model.TeacherId).FirstOrDefault();
-                // TODO: Add convertation using AutoMapper
                 teacher.FirstName = model.FirstName;
                 teacher.LastName = model.LastName;
                 teacher.Subject = model.Subject;
@@ -385,7 +457,8 @@ namespace SimpleStudentsWebsite.Classes.Helpers
                             record = new Journal()
                             {
                                 StudentId = studentId,
-                                TeacherId = teacherId
+                                TeacherId = teacherId,
+                                Grade = 0
                             };
                             record.Teachers = db.Teachers.Where(t => t.TeacherId == teacherId).FirstOrDefault();
                             record.Students = db.Students.Where(s => s.StudentId == studentId).FirstOrDefault();

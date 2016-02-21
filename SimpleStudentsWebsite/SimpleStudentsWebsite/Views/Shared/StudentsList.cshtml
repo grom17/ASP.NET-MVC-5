@@ -1,66 +1,16 @@
-﻿@model IEnumerable<StudentModel>
-
-<p>
-    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher))
-    {
-        <input class="btn btn-default" type="button" id="prepareCreateStudent"
-               value="Добавить студента" onclick="PrepareCreateStudent()">
-    }
-</p>
-<div class="form-group">
-    <input class="form-control"
-           name="quick-search"
-           placeholder="Искать по ключевому слову..."
-           data-input="quick-search"
-           data-search-target="#students tbody > tr"
-           data-noresult-text="Нет результатов">
-</div>
-
-<table id="students" class="slimtable">
+﻿<table id="students" class="display" width="100%" cellspacing="0">
     <thead>
-        <tr align="center">
-            <th width="60%">
-                @Html.DisplayNameFor(model => model.Fullname)
-            </th>
-            <th width="20%">
-                @Html.DisplayNameFor(model => model.Grades)
-            </th>
-            @if (Request.IsAuthenticated && 
-                (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher) ||
-                CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student)))
-            {
-                <th width="20%"></th>
-            }
+        <tr>
+            <th>StudentId</th>
+            <th>Студент</th>
+            <th>Средний балл</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fullname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Grades)
-                </td>
-                @*TODO: Open details by click on row instead of click on btn*@
-                
-                @if (Request.IsAuthenticated)
-                {
-
-                    if (CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Teacher) ||
-                        CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Student))
-                    {
-                        <td>
-                            <input class="btn btn-default" type="button" id="showStudentDetailsBtn" 
-                                   value="Профиль" onclick="StudentDetails(@item.Id)">                          
-                        </td>
-                    }
-                }
-
-            </tr>
-        }
-    </tbody>
+    <tfoot>
+        <tr>
+            <th>StudentId</th>
+            <th>Студент</th>
+            <th>Средний балл</th>
+        </tr>
+    </tfoot>
 </table>
-
-

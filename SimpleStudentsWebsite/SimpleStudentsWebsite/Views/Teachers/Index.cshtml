@@ -8,6 +8,13 @@
 </div>
 
 <div id="teachersDiv" class="hidden" data-action-url="@Url.Action("ReadTeachers")" data-detail-url="@Url.Action("TeacherDetail")" data-panel="teacherWindow" data-loading-msg="Загрузка списка преподавателей">
+    <p>
+        @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
+        {
+            <input class="btn btn-default" type="button" id="prepareCreateTeacher"
+                   value="Добавить преподавателя" onclick="PrepareCreateTeacher()">
+        }
+    </p>
     @{Html.RenderPartial("TeachersList"); }
 </div>
 
@@ -17,5 +24,4 @@
 @section scripts
 {
     @Scripts.Render("~/bundles/teachers")
-    @Scripts.Render("~/bundles/students")
 }

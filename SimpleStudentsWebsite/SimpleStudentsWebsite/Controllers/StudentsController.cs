@@ -1,4 +1,5 @@
-﻿using SimpleStudentsWebsite.Classes;
+﻿using AutoMapper;
+using SimpleStudentsWebsite.Classes;
 using SimpleStudentsWebsite.Classes.Attributes;
 using SimpleStudentsWebsite.Classes.Helpers;
 using SimpleStudentsWebsite.DAL;
@@ -25,8 +26,8 @@ namespace SimpleStudentsWebsite.Controllers
         {
             try
             {
-                var students = DBHelper.Instance.GetStudentsList().AsEnumerable();
-                return PartialView("StudentsList", students);
+                var students = DBHelper.Instance.GetStudentsListWithAverageGrade();
+                return Content(GlobalHelper.Json(students));
             }
             catch (Exception ex)
             {
@@ -35,8 +36,7 @@ namespace SimpleStudentsWebsite.Controllers
         }
 
         // GET: Students/StudentDetails
-        [Role(Access = Roles.Student |
-                       Roles.Teacher)]
+        [Role(Access = Roles.Student | Roles.Teacher)]
         public ActionResult StudentDetails(int Id)
         {
             try
@@ -90,7 +90,7 @@ namespace SimpleStudentsWebsite.Controllers
             try
             {
                 if (grades == null || grades.Where(x=>x.IsTeacher).Any(g => g.Grade == null))
-                    throw new Exception("Введите все оценки");
+                    throw new Exception("Не все оценки проставлены");
                 DBHelper.Instance.UpdateStudentGrades(grades);
                 return Json(new { success = "Оценки студента обновлены" });
             }
@@ -117,13 +117,15 @@ namespace SimpleStudentsWebsite.Controllers
         // POST: Students/CreateStudent
         [Role(Access = Roles.Teacher)]
         [HttpPost]
-        public ActionResult CreateStudent(Students newStudent)
+        public ActionResult CreateStudent(NewStudent newStudent)
         {
             try
             {
                 CheckModelState(ModelState, "Students.CreateStudent");
                 newStudent.Password = AESCrypt.EncryptString(newStudent.Password, "SSWSecretKey");
-                var Id = DBHelper.Instance.CreateStudent(newStudent);
+                var Mapper = new MapperConfiguration(cfg => cfg.CreateMap<NewStudent, Students>()).CreateMapper();
+                Students student = Mapper.Map<Students>(newStudent);
+                var Id = DBHelper.Instance.CreateStudent(student);
                 return Json(new { success = "Студент успешно добавлен", Id = Id });
             }
             catch (Exception ex)

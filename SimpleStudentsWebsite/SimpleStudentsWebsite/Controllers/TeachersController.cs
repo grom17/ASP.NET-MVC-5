@@ -23,9 +23,8 @@ namespace SimpleStudentsWebsite.Controllers
         [AllowAnonymous]
         public ActionResult ReadTeachers()
         {
-            List<TeacherModel> teachers = DBHelper.Instance.GetTeachersList();
+            List<TeacherModel> teachers = DBHelper.Instance.GetTeachersListWithStudentsCount();
             return Content(GlobalHelper.Json(teachers));
-            //return PartialView("TeachersList", teachers);
         }
 
         // GET: Teachers/TeacherDetails

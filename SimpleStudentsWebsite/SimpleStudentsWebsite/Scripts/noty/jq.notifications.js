@@ -1,5 +1,5 @@
-﻿// make with timeout to allow hide it by 'click' event for whole body.
-function ShowSuccess(message) {
+﻿function ShowSuccess(message) {
+    // make with timeout to allow hide it by 'click' event for whole body.
     setTimeout(function () {
         ShowNotification(message, 'success');
     }, 0);
@@ -24,7 +24,7 @@ function ShowNotification(message, type) {
         return;
     }
     message = message.replace('\\n', '<br />');
-    var n = noty({ text: message, layout: 'topRight', theme: 'defaultTheme', timeout: false, type: type, closeWith: ['click'] });
+    var n = noty({ text: message, layout: 'topRight', closeWith: ['click'], theme: 'defaultTheme', timeout: false, type: type });
 }
 function NConfirm(qtext, postext, negtext, posClick, negClick) {
     MessageConfirm(qtext, posClick, negClick);
@@ -83,7 +83,7 @@ function ShowConfirm(text, posClick, negClick, currentValue) {
     $("#noty_center_layout_container").find('.noty_message').after(textbox);
 
     $("#noty_center_layout_container").find('li').css({ width: '200px' });
-    $("#GradeTb").focus();
+    $("#GradeTb").focus().select();
 }
 var NotificationDisableClose = false;
 $(document).ready(function () { $('body').click(function (e) { ClosePopupMessages(e) }) });

@@ -1,6 +1,7 @@
 ﻿using SimpleStudentsWebsite.Classes.Attributes;
 using SimpleStudentsWebsite.Classes.Helpers;
 using SimpleStudentsWebsite.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -40,22 +41,45 @@ namespace SimpleStudentsWebsite.Controllers
         // GET: Reports/LoadBestStudentsList
         public ActionResult LoadBestStudentsList()
         {
-            var students = DBHelper.Instance.GetBestStudentsList().AsEnumerable();
-            return PartialView("StudentsList", students);
+            try
+            {
+                var students = DBHelper.Instance.GetBestStudentsList();
+                return Content(GlobalHelper.Json(students));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { errors = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // GET: Reports/LoadTeachersOfAllStudentsList
         public ActionResult LoadTeachersOfAllStudentsList()
         {
-            var teachers = DBHelper.Instance.GetTeachersOfAllStudentsList().AsEnumerable();
-            return PartialView("TeachersList", teachers);
+            try
+            {
+                var teachers = DBHelper.Instance.GetTeachersOfAllStudentsList();
+                return Content(GlobalHelper.Json(teachers));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { errors = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         // GET: Reports/LoadTeachersOfLowerCountOfStudentsList
         public ActionResult LoadTeachersOfLowerCountOfStudentsList()
         {
-            var teachers = DBHelper.Instance.GetTeachersOfLowerCountOfStudentsList().AsEnumerable();
-            return PartialView("TeachersList", teachers);
+            try
+            {
+                var teachers = DBHelper.Instance.GetTeachersOfLowerCountOfStudentsList();
+                return Content(GlobalHelper.Json(teachers));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { errors = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
+
+        // TODO: Add report: students without any teacher
     }
 }

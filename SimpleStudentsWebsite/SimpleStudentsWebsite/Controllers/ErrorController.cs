@@ -27,14 +27,20 @@ namespace SimpleStudentsWebsite.Controllers
         public ActionResult Unauthorized()
         {
             if (Response.StatusCode == 403)
+            {
+                Response.StatusCode = 200;
                 return View();
+            }
             return RedirectToPrevious();
         }
 
         public ActionResult NotFound()
         {
             if (Response.StatusCode == 404)
+            {
+                Response.StatusCode = 200;
                 return View();
+            }
             return RedirectToPrevious();
         }
     }

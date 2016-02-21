@@ -2,8 +2,8 @@
     $("#studentsDiv").addClass("hidden");
     var div = $("#studentDetailsDiv");
     div.removeClass("hidden");
-    LoadingState(true, div);
-    LoadingStateMessage(div, div);
+    LoadingState(true);
+    LoadingStateMessage(div);
     $.ajax({
         url: "/Students/StudentDetails",
         data: { Id: Id },
@@ -16,7 +16,7 @@
         },
         error: AjaxCommonErrorHandling,
         complete: function (req, status) {
-            LoadingState(false, div);
+            LoadingState(false);
         }
     });
 }
@@ -24,42 +24,22 @@
 function studentDetailFormSubmit() {
     addValidator("studentDetailForm");
     if ($("#studentDetailForm").valid()) {
-        // If form valid set loading state
-        OnBeginUpdateStudent();
-
-        // Updating student details
-        $.ajax({
-            url: "/Students/UpdateStudentDetails",
-            type: "POST",
-            data:
-                {
-                    StudentId: $("#StudentId").val(),
-                    FirstName: $("#FirstName").val(),
-                    LastName: $("#LastName").val(),
-                    Login: $("#Login").val()
-                }
-            ,
-            success: function (result) {
-                AjaxCommonSuccessHandling(result, function () {
-                    // If update was OK students list will be refreshed
-                    SetNeedRefresh();
-                    UpdateStudentGrades("studentGradesList", $("#StudentId").val());
-                });
-            },
-        });
+        $("#studentDetailForm").trigger('submit');
     }
 }
 
 function OnBeginUpdateStudent() {
     LoadingState(true);
-    LoadingStateMessage($("#updateStudent"), $("#studentForm"));
+    LoadingStateMessage($("#updateStudent"));
 }
 function OnSuccessUpdateStudent(result) {
     AjaxCommonSuccessHandling(result, function () {
+        SetNeedRefresh();
+        UpdateStudentGrades("studentGradesList", $("#StudentId").val());
     });
 }
-function OnCompleteUpdateStudent(result) {
-    LoadingState(false, $("#studentForm"));
+function OnCompleteUpdateStudent() {
+    LoadingState(false);
     updateDBInfo();
     SetNeedRefresh();
     BackToList();

@@ -3,31 +3,25 @@
 });
 
 var NeedRefresh = false;
-function SetNeedRefresh()
-{
+function SetNeedRefresh(){
     NeedRefresh = true;
 }
 
 function ReadStudents() {
     var div = $("#studentsDiv");
-    LoadingState(true, div);
-    LoadingStateMessage(div, div);
+    LoadingState(true);
+    LoadingStateMessage(div);
     $.ajax({
         url: $("#studentsDiv").data("action-url"),
         success: function (result) {
             AjaxCommonSuccessHandling(result, function () {
-                div.html(result);
-                $("#students").slimtable({
-                    colSettings:
-                        [{
-			                colNumber: 2, enableSort: false
-                        }]
-                });
+                ApplyStudentsListDataTable("students", $.parseJSON(result));
+                div.removeClass('hidden');
             });
         },
         error: AjaxCommonErrorHandling,
         complete: function (req, status) {
-            LoadingState(false, div);
+            LoadingState(false);
         }
     });
 }
@@ -64,6 +58,9 @@ function LoadStudentGrades(Id) {
 }
 
 function ApplySelectableDataTable(tableName, data) {
+    if ($.fn.DataTable.isDataTable('#' + tableName)) {
+        $('#' + tableName).dataTable().fnDestroy();
+    }
     // extension to allow order grades
     $.fn.dataTable.ext.order['dom-text-numeric'] = function (settings, col) {
         return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {

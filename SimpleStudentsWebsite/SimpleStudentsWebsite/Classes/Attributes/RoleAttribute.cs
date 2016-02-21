@@ -22,7 +22,7 @@ namespace SimpleStudentsWebsite.Classes.Attributes
                     !CookieHelper.Instance.Role.HasFlag(Roles.Teacher))
                     filterContext.HttpContext.Response.StatusCode = 403;
             }
-            if (Access == (Roles.Teacher | Roles.Dean))
+            else if (Access == (Roles.Teacher | Roles.Dean))
             {
                 if (!CookieHelper.Instance.Role.HasFlag(Roles.Teacher) &&
                     !CookieHelper.Instance.Role.HasFlag(Roles.Dean))

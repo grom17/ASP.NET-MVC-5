@@ -1,6 +1,4 @@
-﻿@model IEnumerable<ReportModel>
-
-@{
+﻿@{
     ViewBag.Title = "Отчеты";
 }
 
@@ -9,23 +7,23 @@
 <ul>
     @foreach (var item in Model)
     {
-        <li><button onclick="LoadReports(id = @item.Id)">@item.ReportName</button></li>
+        <li><button class="btn btn-default" onclick="LoadReports(id = @item.Id)">@item.ReportName</button></li>
     }
 </ul>
 
 <div id="bestStudentsDiv" class="hidden" data-action-url="@Url.Action("LoadReport")" data-loading-msg="Загрузка списка студентов">
     <h3>Лучшие студенты</h3>
-    @Html.Partial("StudentsList", new List<StudentModel>().AsEnumerable())
+    @{Html.RenderPartial("StudentsList"); }
 </div>
 
-<div id="teachersOfAllStdsDiv" class="hidden" data-action-url="@Url.Action("LoadReport")" data-loading-msg="Загрузка списка преподавателей">
-    <h3>Преподаватели, обучающие всех студентов</h3>
-    @Html.Partial("TeachersList", new List<TeacherModel>().AsEnumerable())
-</div>
-
-<div id="teachersOfLowerCountStdsDiv" class="hidden" data-action-url="@Url.Action("LoadReport")" data-loading-msg="Загрузка списка преподавателей">
-    <h3>Преподаватели с наименьшим количеством студентов</h3>
-    @Html.Partial("TeachersList", new List<TeacherModel>().AsEnumerable())
+<div id="teacherReportsDiv" class="hidden" data-action-url="@Url.Action("LoadReport")" data-loading-msg="Загрузка списка преподавателей">
+    <div id="teachersOfAllStdsDiv" >
+        <h3 class="hidden">Преподаватели с наименьшим количеством студентов</h3>
+    </div>
+    <div id="teachersOfLowerCountStdsDiv">
+        <h3 class="hidden">Преподаватели с наименьшим количеством студентов</h3>
+    </div>
+    @{Html.RenderPartial("TeachersList"); }
 </div>
 
 @section scripts

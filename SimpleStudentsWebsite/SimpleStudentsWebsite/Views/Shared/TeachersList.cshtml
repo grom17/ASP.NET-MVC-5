@@ -1,24 +1,14 @@
-﻿@model IEnumerable<TeacherModel>
-
-<p>
-    @if (Request.IsAuthenticated && CookieHelper.Instance.Role.HasFlag(SimpleStudentsWebsite.Classes.Roles.Dean))
-    {
-        <input class="btn btn-default" type="button" id="prepareCreateTeacher"
-               value="Добавить преподавателя" onclick="PrepareCreateTeacher()">
-    }
-</p>
-
-<table id="teachers" class="display" width="100%" cellspacing="0">
+﻿<table id="teachers" class="display" width="100%" cellspacing="0">
     <thead>
         <tr>
-            <th>TeacherId</th>
+            <th>Id</th>
             <th>Преподаватель</th>
             <th>Студенты</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <th>TeacherId</th>
+            <th>Id</th>
             <th>Преподаватель</th>
             <th>Студенты</th>
         </tr>
