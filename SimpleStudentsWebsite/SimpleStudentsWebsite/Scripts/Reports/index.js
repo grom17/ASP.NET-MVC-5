@@ -12,11 +12,10 @@
     var table;
     div = mainDivs[id - 1];
     table = id == 1 ? "students" : "teachers";
-    mainDivs.forEach(function (item)
-    {
+    mainDivs.forEach(function(item) {
         item.addClass("hidden");
     });
-    teacherDivs.forEach(function (item) {
+    teacherDivs.forEach(function(item) {
         item.addClass("hidden");
     });
     LoadingState(true);
@@ -24,8 +23,8 @@
     $.ajax({
         url: div.data("action-url"),
         data: { id: id },
-        success: function (result) {
-            AjaxCommonSuccessHandling(result, function () {
+        success: function(result) {
+            AjaxCommonSuccessHandling(result, function() {
                 var data = $.parseJSON(result);
                 if (id == 1) {
                     ApplyStudentsListDataTable("students", data);
@@ -37,7 +36,7 @@
                 div.removeClass("hidden");
             });
         },
-        complete: function (req, status) {
+        complete: function(req, status) {
             LoadingState(false);
         }
     });
