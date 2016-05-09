@@ -1,9 +1,9 @@
-﻿$(function () {
+﻿$(function() {
     setTimeout(ReadStudents, 0);
 });
 
 var NeedRefresh = false;
-function SetNeedRefresh(){
+function SetNeedRefresh() {
     NeedRefresh = true;
 }
 
@@ -13,21 +13,20 @@ function ReadStudents() {
     LoadingStateMessage(div);
     $.ajax({
         url: $("#studentsDiv").data("action-url"),
-        success: function (result) {
-            AjaxCommonSuccessHandling(result, function () {
+        success: function(result) {
+            AjaxCommonSuccessHandling(result, function() {
                 ApplyStudentsListDataTable("students", $.parseJSON(result));
                 div.removeClass('hidden');
             });
         },
         error: AjaxCommonErrorHandling,
-        complete: function (req, status) {
+        complete: function(req, status) {
             LoadingState(false);
         }
     });
 }
 
-function BackToList()
-{
+function BackToList() {
     $("#studentsDiv").removeClass("hidden");
     $("#studentDetailsDiv").addClass("hidden");
     $("#StudentGrades").addClass("hidden");
@@ -39,19 +38,19 @@ function BackToList()
 }
 
 function LoadStudentGrades(Id) {
-    var div = Id == 0 ? $("div#newStudentGrades") : $("div#studentGrades");
+    var div = Id === 0 ? $("div#newStudentGrades") : $("div#studentGrades");
     LoadingState(true, div);
     LoadingStateMessage(div, div);
     $.ajax({
         url: div.data("action-url"),
         data: { Id: Id },
-        success: function (res) {
-            AjaxCommonSuccessHandling(res, function () {
-                ApplySelectableDataTable(Id == 0 ? "newStudentGradesList" : "studentGradesList", $.parseJSON(res));
+        success: function(res) {
+            AjaxCommonSuccessHandling(res, function() {
+                ApplySelectableDataTable(Id === 0 ? "newStudentGradesList" : "studentGradesList", $.parseJSON(res));
             });
         },
         error: AjaxCommonErrorHandling,
-        complete: function (req, status) {
+        complete: function(req, status) {
             LoadingState(false, div);
         }
     });
@@ -62,13 +61,13 @@ function ApplySelectableDataTable(tableName, data) {
         $('#' + tableName).dataTable().fnDestroy();
     }
     // extension to allow order grades
-    $.fn.dataTable.ext.order['dom-text-numeric'] = function (settings, col) {
-        return this.api().column(col, { order: 'index' }).nodes().map(function (td, i) {
+    $.fn.dataTable.ext.order['dom-text-numeric'] = function(settings, col) {
+        return this.api().column(col, { order: 'index' }).nodes().map(function(td, i) {
             return $('input', td).val() * 1;
         });
     };
 
-    // Setup - add a text input to each footer cell
+    // add a text input to each footer cell
     $('#' + tableName + ' tfoot th').each(function (i) {
         if (i > 0) {
             var title = $(this).text();
@@ -85,18 +84,13 @@ function ApplySelectableDataTable(tableName, data) {
                 // first column as checkbox
                 // if student belongs to the teacher it will be checked
                 "data": "IsTeacher", render: function (data, type, full) {
-                    if (data == true) {
-                        return '<input type="hidden" name=IsTeacher value="true" />';
-                    }
-                    else {
-                        return '<input type="hidden" name=IsTeacher value="false" />';
-                    }
+                    return '<input type="hidden" name=IsTeacher value="{0}" />'.format(data);
                 }
             },
             {
                 // hidden column with Teacher Id value
                 "data": "TeacherId", render: function (data, type, full) {
-                    return '{0}<input type="hidden" name=TeacherId value="{0}" />'.format(data);
+                    return '<input type="hidden" name=TeacherId value="{0}" />'.format(data);
                 }
             },
             {
@@ -114,9 +108,11 @@ function ApplySelectableDataTable(tableName, data) {
             {
                 // student's grade as textbox input, can be changed by click
                 "data": "Grade", render: function (data, type, full) {
-                    return '<input type="hidden" name=Grade value="{0}" /><input type="text" id=Grade disabled="disabled" class="form-control input-sm" name=Grade value="{0}" />'.format(
-                        data != null ? data : "");
-                }, "orderDataType": "dom-text-numeric"
+                    var value = data !== null ? data : "";
+                    return '<input type="hidden" name=Grade value="{0}" />'.format(value) + 
+                           '<input type="text" id=Grade disabled="disabled" class="form-control input-sm" name=Grade value="{0}" />'.format(value);
+                },
+                "orderDataType": "dom-text-numeric"
             }
         ],
         columnDefs: [
@@ -128,7 +124,7 @@ function ApplySelectableDataTable(tableName, data) {
             {
                 // column with Teacher Id
                 visible: false,
-                targets: [1]
+                targets: 1
             }
         ],
         // default order by grades
@@ -138,10 +134,10 @@ function ApplySelectableDataTable(tableName, data) {
         // count of records to show on each page
         pageLength: 20,
         // select rows where student belongs to the teacher
-        createdRow: function (row, data, index) {
+        createdRow: function(row, data, index) {
             $('td', row).eq(0).addClass('select-checkbox');
-            if (data.IsTeacher == true) {
-                $(row).addClass('selected')
+            if (data.IsTeacher) {
+                $(row).addClass('selected');
             }
         },
         // some info on RU
@@ -190,8 +186,8 @@ function ApplySelectableDataTable(tableName, data) {
         var that = this;
         var row = $(this).closest('tr');
         // Open pop-up to type grade and save it
-        if ($(that).attr("class") == "sorting_1") {
-            var currentValue = table.cell(that).data() != null ? table.cell(that).data() : "";
+        if ($(that).attr("class") === "sorting_1") {
+            var currentValue = table.cell(that).data() !== null ? table.cell(that).data() : "";
             ShowConfirm("Оценка:", function (grade) {
                 table.cell(that).data(grade);
             }, function () { }, currentValue);
@@ -199,7 +195,7 @@ function ApplySelectableDataTable(tableName, data) {
             // Select/unselect row and update IsTeacher value
         else {
             $(this).closest('tr').toggleClass('selected');
-            table.cell(row, 0).data((!table.cell(row, 0).data()));
+            table.cell(row, 0).data(!table.cell(row, 0).data());
         }
     });
 }
@@ -221,7 +217,7 @@ function UpdateStudentGrades(tableName, studentId) {
             IsTeacher: data[i].IsTeacher,
             TeacherFullName: data[i].TeacherFullName,
             Subject: data[i].Subject,
-            Grade: data[i].Grade,
+            Grade: data[i].Grade
         });
     }
 

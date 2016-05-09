@@ -6,19 +6,19 @@
     LoadingStateMessage(btn, div);
     $.ajax({
         url: btn.data("action-url"),
-        data: { Id: Id},
-        success: function (result) {
+        data: { Id: Id },
+        success: function(result) {
             OnSuccessDeleteStudent(result);
         },
         error: AjaxCommonErrorHandling,
-        complete: function (req, status) {
+        complete: function(req, status) {
             LoadingState(false, div);
         }
     });
 }
 
 function OnSuccessDeleteStudent(result) {
-    AjaxCommonSuccessHandling(result, function () {
+    AjaxCommonSuccessHandling(result, function() {
         updateDBInfo();
         SetNeedRefresh();
         BackToList();

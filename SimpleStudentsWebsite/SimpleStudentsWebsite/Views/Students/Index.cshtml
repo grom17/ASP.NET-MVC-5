@@ -19,6 +19,50 @@
 </div>
 
 <div id="studentDetailsDiv" class="hidden" data-detail-url="@Url.Action("StudentDetails")" data-loading-msg="Загрузка профиля студента">
+<p><input id="backToList" type="button" value="Назад" class="btn btn-default" onclick="BackToList()">
+</p>
+<form id="studentDetailForm" action="/Students/UpdateStudentDetails" class="form-horizontal" data-ajax="true" data-ajax-begin="OnBeginUpdateStudent" data-ajax-complete="OnCompleteUpdateStudent" data-ajax-failure="AjaxCommonErrorHandling" data-ajax-success="OnSuccessUpdateStudent" method="post" role="form">        <hr>
+<input data-val="true" data-val-number="The field StudentId must be a number." data-val-required="The StudentId field is required." id="StudentId" name="StudentId" type="hidden" value="2">        <div class="form-group">
+            <label class="col-md-2 control-label" for="FirstName">Имя</label>
+            <div class="col-md-10">
+                <input class="form-control" data-val="true" data-val-length="The field Имя must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="The Имя field is required." id="FirstName" name="FirstName" type="text" value="Евгений">
+                <span class="field-validation-valid text-danger" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="LastName">Фамилия</label>
+            <div class="col-md-10">
+                <input class="form-control" data-val="true" data-val-length="The field Фамилия must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="The Фамилия field is required." id="LastName" name="LastName" type="text" value="Белов">
+                <span class="field-validation-valid text-danger" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="Login">Логин</label>
+            <div class="col-md-10">
+                <input data-val="true" data-val-length="The field Логин must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="The Логин field is required." id="Login" name="Login" type="hidden" value="evgeny.belov">
+                evgeny.belov
+            </div>
+        </div>
+        <div id="addTeacherSelect" data-action-url="/Students/LoadTeachers" data-loading-msg="Загрузка преподавателей" data-add-teacher-msg="Добавление преподавателей">
+        </div>
+        <div id="studentGrades" data-action-url="/Students/LoadStudentGrades" data-loading-msg="Загрузка оценок">
+            <div id="studentGradesList_wrapper" class="dataTables_wrapper form-inline dt-bootstrap"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="studentGradesList_length"><label>Показывать <select name="studentGradesList_length" aria-controls="studentGradesList" class="form-control input-sm"><option value="10">10</option><option value="20">20</option><option value="50">50</option><option value="-1">Все</option></select> записей</label></div></div><div class="col-sm-6"><div id="studentGradesList_filter" class="dataTables_filter"><label>Искать:<input type="search" class="form-control input-sm" placeholder="" aria-controls="studentGradesList"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="studentGradesList" class="display dataTable" cellspacing="0" role="grid" aria-describedby="studentGradesList_info" style="width: 1145px;">
+                <thead>
+                    <tr role="row"><th class="sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 23px;"></th><th class="sorting" tabindex="0" aria-controls="studentGradesList" rowspan="1" colspan="1" aria-label="Преподаватель: activate to sort column ascending" style="width: 314px;">Преподаватель</th><th class="sorting" tabindex="0" aria-controls="studentGradesList" rowspan="1" colspan="1" aria-label="Предмет: activate to sort column ascending" style="width: 314px;">Предмет</th><th class="sorting_desc" tabindex="0" aria-controls="studentGradesList" rowspan="1" colspan="1" aria-sort="descending" aria-label="Оценка: activate to sort column ascending" style="width: 314px;">Оценка</th></tr>
+                <tr><th rowspan="1" colspan="1"></th><th rowspan="1" colspan="1" style="padding: 8px;"><input type="search" class="form-control input-sm" placeholder="Преподаватель"></th><th rowspan="1" colspan="1" style="padding: 8px;"><input type="search" class="form-control input-sm" placeholder="Предмет"></th><th rowspan="1" colspan="1" style="padding: 8px;"><input type="search" class="form-control input-sm" placeholder="Оценка"></th></tr></thead>
+                <tfoot>
+                    
+                </tfoot>
+            <tbody><tr class="selected odd" role="row"><td class="select-checkbox"><input type="hidden" name="IsTeacher" value="true"></td><td>Смирнов Вадим<input type="hidden" name="TeacherFullName" value="Смирнов Вадим"></td><td>Физика<input type="hidden" name="Subject" value="Физика"></td><td class="sorting_1"><input type="hidden" name="Grade" value="{0}"><input type="text" id="Grade" disabled="disabled" class="form-control input-sm" name="Grade" value="4"></td></tr><tr role="row" class="even"><td class="select-checkbox"><input type="hidden" name="IsTeacher" value="false"></td><td>Петров Семен<input type="hidden" name="TeacherFullName" value="Петров Семен"></td><td>Химия<input type="hidden" name="Subject" value="Химия"></td><td class="sorting_1"><input type="hidden" name="Grade" value="{0}"><input type="text" id="Grade" disabled="disabled" class="form-control input-sm" name="Grade" value=""></td></tr><tr class="selected odd" role="row"><td class="select-checkbox"><input type="hidden" name="IsTeacher" value="true"></td><td>Сидоров Петр<input type="hidden" name="TeacherFullName" value="Сидоров Петр"></td><td>Русский язык<input type="hidden" name="Subject" value="Русский язык"></td><td class="sorting_1"><input type="hidden" name="Grade" value="{0}"><input type="text" id="Grade" disabled="disabled" class="form-control input-sm" name="Grade" value="5"></td></tr></tbody></table></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="studentGradesList_info" role="status" aria-live="polite">Показано с 1 по 3 из 3 записей</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="studentGradesList_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="studentGradesList_previous"><a href="#" aria-controls="studentGradesList" data-dt-idx="0" tabindex="0">&lt;</a></li><li class="paginate_button active"><a href="#" aria-controls="studentGradesList" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button next disabled" id="studentGradesList_next"><a href="#" aria-controls="studentGradesList" data-dt-idx="2" tabindex="0">&gt;</a></li></ul></div></div></div></div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="updateStudent" type="button" value="Обновить" class="btn btn-default" data-loading-msg="Обновление данных студента" onclick="studentDetailFormSubmit()">
+                <input id="deleteStudent" type="button" value="Удалить" class="btn btn-default" data-loading-msg="Удаление студента" onclick="StudentDelete(2)" data-action-url="/Students/DeleteStudent">
+            </div>
+        </div>
+</form>
+
 </div>
 
 @section scripts
