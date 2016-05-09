@@ -1,0 +1,56 @@
+﻿@model EmployeeModel
+<p>
+    <input id="backToList" type="button" value="@Messages.BackBtn" class="btn btn-default"
+           onclick="BackToList()" />
+</p>
+
+@using (Ajax.BeginForm("UpdateEmployee", new { }, new AjaxOptions()
+{
+    OnBegin = "OnBeginUpdateEmployee",
+    OnComplete = "OnCompleteUpdateEmployee",
+    OnSuccess = "OnSuccessUpdateEmployee",
+    OnFailure = "AjaxCommonErrorHandling"
+}, new { Id = "employeeDetailForm", @class = "form-horizontal", role = "form" }))
+{
+    <hr />
+    @Html.HiddenFor(m => m.PersonId)
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Patronymic, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Patronymic, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Patronymic, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="updateEmployee" type="button" value="@Messages.UpdateEmployeeBtn" class="btn btn-default"
+                    data-loading-msg="@Messages.UpdatingEmployeeDetails"
+                    onclick="employeeDetailFormSubmit()" />
+            <input id="deleteEmployee" type="button" value="@Messages.DeleteEmployeeBtn" class="btn btn-default"
+                    data-loading-msg="@Messages.DeletingEmployee"
+                    onclick="DeleteEmployee(@Model.PersonId)" data-action-url="@Url.Action("DeleteEmployee")" />
+        </div>
+    </div>
+}
