@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = Messages.StaffTitle;
+}
+
+<h2>@Messages.StaffTitle</h2>
+
+<div id="newEmployeeDiv" class="hidden" data-action-url="@Url.Action("PrepareCreateEmployee")" data-loading-msg="@Messages.LoadingNewEmployeeCard">
+</div>
+
+<div id="staffDiv" class="hidden" data-action-url="@Url.Action("ReadEmployees")" data-loading-msg="@Messages.LoadingEmployeesList">
+    <p><input class="btn btn-default" type="button" id="prepareCreateEmployee"
+                   value="@Messages.CreateEmployeeBtn" onclick="PrepareCreateEmployee()">
+    </p>
+    @{Html.RenderPartial("EmployeesList"); }
+</div>
+
+<div id="employeeDetailsDiv" class="hidden" data-detail-url="@Url.Action("EmployeeDetails")" data-loading-msg="@Messages.LoadingEmployeeDetails">
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/staff")
+    @Scripts.Render("~/bundles/dtables")
+    @Styles.Render("~/Content/dtables");
+}
