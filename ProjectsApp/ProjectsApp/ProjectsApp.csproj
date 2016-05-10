@@ -143,6 +143,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="DAL\ProjectExecutors.cs" />
     <Compile Include="DAL\ProjectInfo.cs" />
@@ -152,12 +153,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\EmployeeModel.cs" />
+    <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Messages.xml" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="App_Data\Messages.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\Bootstrap\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-dtp-wrap.css" />
+    <Content Include="Content\Bootstrap\bootstrap-dtp-wrap.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap-wrap.css" />
+    <Content Include="Content\Bootstrap\bootstrap-wrap.min.css" />
+    <Content Include="Content\Bootstrap\bootstrap.css" />
+    <Content Include="Content\Bootstrap\bootstrap.min.css" />
     <Content Include="Content\DataTables\dataTables.bootstrap.css" />
     <Content Include="Content\DataTables\jquery.dataTables.css" />
     <Content Include="Content\DataTables\select.bootstrap.css" />
@@ -167,8 +176,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Bootstrap\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\Bootstrap\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\Bootstrap\bootstrap.js" />
+    <Content Include="Scripts\Bootstrap\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Common\common.js" />
     <Content Include="Scripts\DataTables\dataTables.js" />
@@ -202,8 +213,9 @@
     <Content Include="Scripts\Noty\packaged\jquery.noty.packaged.min.js" />
     <Content Include="Scripts\Noty\promise.js" />
     <Content Include="Scripts\Noty\themes\default.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Projects\index.js" />
+    <Content Include="Scripts\Bootstrap\respond.js" />
+    <Content Include="Scripts\Bootstrap\respond.min.js" />
     <Content Include="Scripts\Staff\deleteEmployee.js" />
     <Content Include="Scripts\Staff\index.js" />
     <Content Include="Scripts\Staff\employeeDetails.js" />
@@ -225,6 +237,9 @@
     <Content Include="Views\Staff\EmployeesList.cshtml" />
     <Content Include="Views\Staff\EmployeeDetails.cshtml" />
     <Content Include="Views\Staff\NewEmployee.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Projects\ProjectsList.cshtml" />
+    <Content Include="Views\Projects\ProjectDetails.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

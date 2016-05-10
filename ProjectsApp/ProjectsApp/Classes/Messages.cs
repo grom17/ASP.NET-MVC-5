@@ -137,4 +137,34 @@ public class Messages
 
     public static string EmployeeNotExists { get { return Instance["EmployeeNotExists"]; } }
     #endregion
+
+    #region Projects
+    public static string ProjectsTitle { get { return Instance["ProjectsTitle"]; } }
+
+    public static string LoadingNewProjectCard { get { return Instance["LoadingNewProjectCard"]; } }
+    public static string LoadingProjectsList { get { return Instance["LoadingProjectsList"]; } }
+    public static string LoadingProjectDetails { get { return Instance["LoadingProjectDetails"]; } }
+
+    public static string UpdatingProjectDetails { get { return Instance["UpdatingProjectDetails"]; } }
+    public static string CreatingNewProject { get { return Instance["CreatingNewProject"]; } }
+    public static string DeletingProject { get { return Instance["DeletingProject"]; } }
+
+    public static string ClientCompanyName { get { return Instance["ClientCompanyName"]; } }
+    public static string ExecutiveCompanyName { get { return Instance["ExecutiveCompanyName"]; } }
+    public static string StartDate { get { return Instance["StartDate"]; } }
+    public static string EndDate { get { return Instance["EndDate"]; } }
+    public static string Priority { get { return Instance["Priority"]; } }
+    public static string Comment { get { return Instance["Comment"]; } }
+    public static string ProjectManagerName { get { return Instance["ProjectManagerName"]; } }
+
+    public static string CreateProjectBtn { get { return Instance["CreateProjectBtn"]; } }
+    public static string DeleteProjectBtn { get { return Instance["DeleteProjectBtn"]; } }
+    public static string UpdateProjectBtn { get { return Instance["UpdateProjectBtn"]; } }
+
+    public static string ProjectDetailsUpdatedSuccessfully { get { return Instance["ProjectDetailsUpdatedSuccessfully"]; } }
+    public static string ProjectDeletedSuccessfully { get { return Instance["ProjectDeletedSuccessfully"]; } }
+    public static string ProjectCreatedSuccessfully { get { return Instance["ProjectCreatedSuccessfully"]; } }
+
+    public static string ProjectNotExists { get { return Instance["ProjectNotExists"]; } }
+    #endregion
 }

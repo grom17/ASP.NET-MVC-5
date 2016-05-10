@@ -103,43 +103,76 @@ namespace ProjectsApp.Classes.Helpers
             }
             db.SaveChanges();
         }
-        
-        /*
-        // Get teachers list with students count
-        public List<TeacherModel> GetTeachersListWithStudentsCount()
+
+        public List<ProjectModel> GetProjectsList()
         {
             try
             {
-                List<TeacherModel> teachers = new List<TeacherModel>();
-                // Select all teachers from journal
-                teachers = (from tch in db.Teachers
-                            join jr in db.Journal
-                            on tch.TeacherId equals jr.TeacherId
-                            group jr by tch.TeacherId into grp
-                            select new TeacherModel
-                            {
-                                Id = grp.Select(x => x.Teachers.TeacherId).FirstOrDefault(),
-                                Fullname = grp.Select(tc => tc.Teachers.LastName + " " + tc.Teachers.FirstName).FirstOrDefault(),
-                                StudentsCount = grp.Count()
-                            }).ToList();
-                // Find teachers without any student and include in list
-                var freeTeachers = GetFreeTeachers();
-                freeTeachers.ForEach(x => teachers.Add(new TeacherModel()
+                List<ProjectModel> projects = new List<ProjectModel>();
+                projects = (from pi in db.ProjectInfo
+                                join st in db.Staff
+                                on pi.ProjectManagerId equals st.PersonId
+                                group pi by pi.ProjectId into grp
+                                select new ProjectModel
+                                {
+                                    ProjectId = grp.Select(x => x.ProjectId).FirstOrDefault(),
+                                    ClientCompanyName = grp.Select(x => x.ClientCompanyName).FirstOrDefault(),
+                                    ExecutiveCompanyName = grp.Select(x => x.ExecutiveCompanyName).FirstOrDefault(),
+                                    StartDate = grp.Select(x => x.StartDate).FirstOrDefault(),
+                                    EndDate = grp.Select(x => x.EndDate).FirstOrDefault(),
+                                    Priority = grp.Select(x => x.Priority).FirstOrDefault(),
+                                    Comment = grp.Select(x => x.Comment).FirstOrDefault(),
+                                    ProjectManagerId = grp.Select(x => x.ProjectManagerId).FirstOrDefault(),
+                                    ProjectManagerName = grp.Select(x => x.Staff.FirstName).FirstOrDefault() + " " +
+                                                         grp.Select(x => x.Staff.Patronymic).FirstOrDefault() + " " +
+                                                         grp.Select(x => x.Staff.LastName).FirstOrDefault()                                                                 
+                                }).ToList();
+                foreach (var pr in projects)
                 {
-                    Id = x.TeacherId,
-                    StudentsCount = 0,
-                    Fullname = x.LastName + " " + x.FirstName
-                }));
-                if (teachers != null)
-                    return teachers;
-                return new List<TeacherModel>();
+                    pr.ProjectManagerName = GetFullname(pr.ProjectManagerName);
+                    pr.ProjectExecutors = GetProjectExecutorsList(pr.ProjectId);
+                }
+                return projects;
             }
             catch (Exception ex)
             {
-                throw new DBException("GetTeachersList(): ", ex.ToString());
+                throw new DBException("GetProjectsList(): ", ex.ToString());
             }
         }
-       
-        */
+
+        public string GetFullname(string name)
+        {
+            string[] names = name.Split();
+            string FirstName = names[0];
+            string Patronymic = names[1];
+            string LastName = names[2];
+            return FirstName.Substring(0, 1) + '.' + Patronymic.Substring(0, 1) + '.' + LastName;
+        }
+
+        public List<EmployeeModel> GetProjectExecutorsList(int ProjectId)
+        {
+            try
+            {
+                List<EmployeeModel> projectExecutors = new List<EmployeeModel>();
+                projectExecutors = (from pe in db.ProjectExecutors
+                                 where pe.ProjectId == ProjectId
+                                 join st in db.Staff
+                                 on pe.ProjectExecutorId equals st.PersonId
+                                 group st by st.PersonId into grp
+                                 select new EmployeeModel
+                                 {
+                                     PersonId = grp.Select(x => x.PersonId).FirstOrDefault(),
+                                     FirstName = grp.Select(x => x.FirstName).FirstOrDefault(),
+                                     Patronymic = grp.Select(x => x.Patronymic).FirstOrDefault(),
+                                     LastName = grp.Select(x => x.LastName).FirstOrDefault(),
+                                     Email = grp.Select(x => x.Email).FirstOrDefault()
+                                 }).ToList();
+                return projectExecutors;
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("GetProjectExecutorsList(): ", ex.ToString());
+            }
+        }
     }
 }

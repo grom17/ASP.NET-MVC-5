@@ -67,4 +67,68 @@
     <value>Профиль сотрудника создан</value>
   </Message>
   
+<!-- Projects -->
+  <Message name="ProjectsTitle">
+    <value>Проекты</value>
+  </Message>
+  <Message name="LoadingNewProjectCard">
+    <value>Загрузка деталей нового проекта</value>
+  </Message>
+  <Message name="LoadingProjectsList">
+    <value>Загрузка списка проектов</value>
+  </Message>
+  <Message name="LoadingProjectDetails">
+    <value>Загрузка деталей проекта</value>
+  </Message>
+  <Message name="UpdatingProjectDetails">
+    <value>Обновление деталей проекта</value>
+  </Message>
+  <Message name="CreatingNewProject">
+    <value>Создание нового проекта</value>
+  </Message>
+  <Message name="DeletingProject">
+    <value>Удаление информации о проекте</value>
+  </Message>
+  <Message name="CreateProjectBtn">
+    <value>Добавить проект</value>
+  </Message>
+  <Message name="DeleteProjectBtn">
+    <value>Удалить проект</value>
+  </Message>
+  <Message name="UpdateProjectBtn">
+    <value>Обновить проект</value>
+  </Message>
+  <Message name="ProjectNotExists">
+    <value>Проекта с Id={0} нет в базе</value>
+  </Message>
+  <Message name="ProjectDetailsUpdatedSuccessfully">
+    <value>Детали проекта обновлены</value>
+  </Message>
+  <Message name="ProjectDeletedSuccessfully">
+    <value>Проект удален</value>
+  </Message>
+  <Message name="ProjectCreatedSuccessfully">
+    <value>Проект создан</value>
+  </Message>
+  <Message name="ClientCompanyName">
+    <value>Заказчик</value>
+  </Message>
+  <Message name="ExecutiveCompanyName">
+    <value>Исполнитель</value>
+  </Message>
+  <Message name="StartDate">
+    <value>Начало</value>
+  </Message>
+  <Message name="EndDate">
+    <value>Окончание</value>
+  </Message>
+  <Message name="Priority">
+    <value>Приоритет</value>
+  </Message>
+  <Message name="Comment">
+    <value>Комментарии</value>
+  </Message>
+  <Message name="ProjectManagerName">
+    <value>Руководитель</value>
+  </Message>  
 </Messages>

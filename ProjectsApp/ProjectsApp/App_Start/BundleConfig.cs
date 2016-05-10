@@ -17,6 +17,9 @@ namespace ProjectsApp
             bundles.Add(new ScriptBundle("~/bundles/staff").IncludeDirectory(
             "~/Scripts/Staff", "*.js", true));
 
+            bundles.Add(new ScriptBundle("~/bundles/projects").IncludeDirectory(
+            "~/Scripts/Projects", "*.js", true));
+
             bundles.Add(new ScriptBundle("~/bundles/common").IncludeDirectory(
             "~/Scripts/Common", "*.js", true));
 
@@ -31,13 +34,14 @@ namespace ProjectsApp
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
+                      "~/Scripts/Bootstrap","*.js", true));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
+                      "~/Content/Bootstrap","*.css", true));
 
             bundles.Add(new StyleBundle("~/Content/dtables").IncludeDirectory(
                       "~/Content/DataTables", "*.css", true));

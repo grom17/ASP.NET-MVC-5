@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = Messages.ProjectsTitle;
+}
+
+<h2>@Messages.ProjectsTitle</h2>
+
+<div id="newProjectDiv" class="hidden" data-action-url="@Url.Action("PrepareCreateProject")" data-loading-msg="@Messages.LoadingNewProjectCard">
+</div>
+
+<div id="projectsDiv" class="hidden" data-action-url="@Url.Action("ReadProjects")" data-loading-msg="@Messages.LoadingProjectsList">
+    <p>
+        <input class="btn btn-default" type="button" id="prepareCreateProject"
+               value="@Messages.CreateProjectBtn" onclick="PrepareCreateProject()">
+    </p>
+    @{Html.RenderPartial("ProjectsList"); }
+</div>
+
+<div id="projectDetailsDiv" class="hidden" data-detail-url="@Url.Action("ProjectDetails")" data-loading-msg="@Messages.LoadingProjectDetails">
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/projects")
+    @Scripts.Render("~/bundles/dtables")
+    @Styles.Render("~/Content/dtables");
+}
