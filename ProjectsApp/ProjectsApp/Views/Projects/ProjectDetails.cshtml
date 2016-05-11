@@ -26,27 +26,19 @@
             @Html.ValidationMessageFor(m => m.ExecutiveCompanyName, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="row narrow-row cr-user">
-        @Html.LabelFor(u => u.ProjectManagerId, new { @class = "col-md-2 control-label" })
-        <div class="controls">
-            @Html.EditorFor(u => u.ProjectManagerId)
-            <div id="username-suggestions-container" class="autocomplete-suggestions">
-            </div>
-        </div>
-    </div>
-    <div class="row narrow-row cr-user">
+    <div class="form-group">
         @Html.LabelFor(c => c.ProjectManagerId, new { @class = "col-md-2 control-label" })
-        <div class="controls">
-            @Html.DropDownListFor(c => c.ProjectManagerId, (ViewData["EmployeeList"] as IEnumerable<SelectListItem>)
+        <div class="col-md-10">
+            @Html.DropDownListFor(c => c.ProjectManagerId, (ViewData["EmployeesList"] as IEnumerable<SelectListItem>)
                                                         .Select(f => new SelectListItem
                                                         {
-                                                            Selected = f.ToString() == Model.ProjectManagerName,
-                                                            Text = f.Value,
+                                                            Selected = f.Value == Model.ProjectManagerId.ToString(),
+                                                            Text = f.Text,
                                                             Value = f.Value
-                                                        }))
+                                                        }), new { @class = "form-control" })
         </div>
     </div>
-    <div class="row cr-dates">
+    @*<div class="row cr-dates">
         <div class="form-group">
             <div class='col-sm-2'>
                 @Html.LabelFor(u => u.StartDate, new { @class = "label-left" })
@@ -71,7 +63,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
     <div class="form-group">
         @Html.LabelFor(m => m.Priority, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -79,14 +71,14 @@
             @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
         </div>
     </div>
-    <div class="row">
-        @Html.LabelFor(c => c.Comment, new { @class = "label-left" })
-        <div class="controls">
-            @Html.TextAreaFor(c => c.Comment, new { rows = 4 })
+    <div class="form-group">
+        @Html.LabelFor(c => c.Comment, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(c => c.Comment, new { @class = "form-control", rows = 4 })
         </div>
     </div>
 
-    <div id="teacherStudents" data-action-url="@Url.Action("LoadTeacherStudents")" data-loading-msg="Загрузка списка студентов">
+    @*<div id="teacherStudents" data-action-url="@Url.Action("LoadTeacherStudents")" data-loading-msg="Загрузка списка студентов">
         <table id="teacherStudentsList" class="display" cellspacing="0">
             <thead>
                 <tr>
@@ -103,16 +95,16 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
+    </div>*@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input id="updateTeacher" type="button" value="Обновить" class="btn btn-default"
-                    data-loading-msg="Обновление данных преподавателя" 
-                    onclick="teacherDetailFormSubmit()" />
-            <input id="deleteTeacher" type="button" value="Удалить" class="btn btn-default"
-                    data-loading-msg="Удаление преподавателя"
-                    onclick="TeacherDelete(@Model.TeacherId)" data-action-url="@Url.Action("DeleteTeacher")" />
+            <input id="updateProject" type="button" value="@Messages.UpdateProjectBtn" class="btn btn-default"
+                    data-loading-msg="@Messages.UpdatingProjectDetails" 
+                    onclick="projectDetailFormSubmit()" />
+            <input id="deleteProject" type="button" value="@Messages.DeleteProjectBtn" class="btn btn-default"
+                    data-loading-msg="@Messages.DeletingProject"
+                    onclick="ProjectDelete(@Model.ProjectId)" data-action-url="@Url.Action("DeleteProject")" />
         </div>
     </div>
 }

@@ -152,6 +152,32 @@ namespace ProjectsApp.Classes.Helpers
             }
         }
 
+        public ProjectModel GetProjectById(int ProjectId)
+        {
+            try
+            {
+                List<ProjectInfo> projects = new List<ProjectInfo>();
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    projects = db.ProjectInfo.ToList();
+                }
+                return GetProjectById(projects, ProjectId);
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("GetProjectById(): ", ex.ToString());
+            }
+        }
+
+        public ProjectModel GetProjectById(List<ProjectInfo> projects, int ProjectId)
+        {
+            var project = projects.Where(s => s.ProjectId == ProjectId).FirstOrDefault();
+            if (project == null)
+                throw new Exception(string.Format(Messages.ProjectNotExists, ProjectId));
+            var Mapper = MapperHelper.CreateMap<ProjectInfo, ProjectModel>();
+            return Mapper.Map<ProjectModel>(project);
+        }
+
         public List<ProjectModel> GetProjectsList(List<ProjectInfo> projects, List<Staff> staff, List<ProjectExecutors> executors)
         {
             List<ProjectModel> projectsList = new List<ProjectModel>();
@@ -171,10 +197,10 @@ namespace ProjectsApp.Classes.Helpers
                                 ProjectManagerId = grp.Select(x => x.ProjectManagerId).FirstOrDefault(),
                                 ProjectManagerName = grp.Select(x => x.Staff.Fullname).FirstOrDefault()
                             }).ToList();
-            foreach (var pr in projectsList)
-            {
-                pr.ProjectExecutors = GetProjectExecutorsList(staff, executors, pr.ProjectId);
-            }
+            //foreach (var pr in projectsList)
+            //{
+            //    pr.ProjectExecutors = GetProjectExecutorsList(staff, executors, pr.ProjectId);
+            //}
             return projectsList;
         }
 

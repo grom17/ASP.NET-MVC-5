@@ -26,5 +26,13 @@ namespace ProjectsApp.Models
         [StringLength(50)]
         [CustomDisplayName("Email")]
         public string Email { get; set; }
+
+        public string Fullname
+        {
+            get
+            {
+                return FirstName.Substring(0, 1) + '.' + Patronymic.Substring(0, 1) + '.' + LastName;
+            }
+        }
     }
 }

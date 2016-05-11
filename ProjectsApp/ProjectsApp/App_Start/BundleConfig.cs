@@ -29,10 +29,11 @@ namespace ProjectsApp
             bundles.Add(new ScriptBundle("~/bundles/dtables").IncludeDirectory(
             "~/Scripts/DataTables", "*.js", true));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
+
+            bundles.Add(new ScriptBundle("~/bundles/moment").Include(
+                        "~/Scripts/moment.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").IncludeDirectory(
                       "~/Scripts/Bootstrap","*.js", true));

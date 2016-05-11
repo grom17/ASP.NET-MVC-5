@@ -28,7 +28,7 @@ namespace ProjectsApp.Models
 
         public string Comment { get; set; }
 
-        public List<EmployeeModel> ProjectExecutors { get; set; }
+        //public List<EmployeeModel> ProjectExecutors { get; set; }
 
         public string StartDateDisplay
         {

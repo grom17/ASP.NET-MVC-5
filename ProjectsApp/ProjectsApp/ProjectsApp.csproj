@@ -173,7 +173,7 @@
     <Content Include="Content\images\arrows.png" />
     <Content Include="Content\images\loading-image.gif" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\Bootstrap\bootstrap-datetimepicker.js" />
@@ -181,6 +181,8 @@
     <Content Include="Scripts\Bootstrap\bootstrap.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\Common\common.js" />
     <Content Include="Scripts\DataTables\dataTables.js" />
     <Content Include="Scripts\DataTables\dataTables_bootstrap.js" />
@@ -213,6 +215,7 @@
     <Content Include="Scripts\Noty\packaged\jquery.noty.packaged.min.js" />
     <Content Include="Scripts\Noty\promise.js" />
     <Content Include="Scripts\Noty\themes\default.js" />
+    <Content Include="Scripts\Projects\projectDetails.js" />
     <Content Include="Scripts\Projects\index.js" />
     <Content Include="Scripts\Bootstrap\respond.js" />
     <Content Include="Scripts\Bootstrap\respond.min.js" />
@@ -243,9 +246,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
