@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Messages>
+  <!-- Common -->
+  <Message name="ApplicationName">
+    <value>Проекты</value>
+  </Message>
+  <Message name="HomePage">
+    <value>Демонстрационное приложение ASP.NET MVC</value>
+  </Message>
+  <Message name="BackBtn">
+    <value>Назад</value>
+  </Message>
+
+  <!-- Staff -->
+  <Message name="StaffTitle">
+    <value>Сотрудники</value>
+  </Message>
+  <Message name="LoadingNewEmployeeCard">
+    <value>Загрузка профиля нового сотрудника</value>
+  </Message>
+  <Message name="LoadingEmployeesList">
+    <value>Загрузка списка сотрудников</value>
+  </Message>
+  <Message name="LoadingEmployeeDetails">
+    <value>Загрузка профиля сотрудника</value>
+  </Message>
+  <Message name="UpdatingEmployeeDetails">
+    <value>Обновление профиля сотрудника</value>
+  </Message>
+  <Message name="CreatingNewEmployee">
+    <value>Создание профиля сотрудника</value>
+  </Message>
+  <Message name="DeletingEmployee">
+    <value>Удаление профиля сотрудника</value>
+  </Message>
+  <Message name="FirstName">
+    <value>Имя</value>
+  </Message>
+  <Message name="LastName">
+    <value>Фамилия</value>
+  </Message>
+  <Message name="Patronymic">
+    <value>Отчество</value>
+  </Message>
+  <Message name="Email">
+    <value>Электронная почта</value>
+  </Message>
+  <Message name="CreateEmployeeBtn">
+    <value>Добавить сотрудника</value>
+  </Message>
+  <Message name="DeleteEmployeeBtn">
+    <value>Удалить сотрудника</value>
+  </Message>
+  <Message name="UpdateEmployeeBtn">
+    <value>Обновить сотрудника</value>
+  </Message>
+  <Message name="EmployeeNotExists">
+    <value>Сотрудника с Id={0} нет в базе</value>
+  </Message>
+  <Message name="EmployeeDetailsUpdatedSuccessfully">
+    <value>Профиль сотрудника обновлен</value>
+  </Message>
+  <Message name="EmployeeDeletedSuccessfully">
+    <value>Профиль сотрудника удален</value>
+  </Message>
+  <Message name="EmployeeCreatedSuccessfully">
+    <value>Профиль сотрудника создан</value>
+  </Message>
+  
+<!-- Projects -->
+  <Message name="ProjectsTitle">
+    <value>Проекты</value>
+  </Message>
+  <Message name="LoadingNewProjectCard">
+    <value>Загрузка деталей нового проекта</value>
+  </Message>
+  <Message name="LoadingProjectsList">
+    <value>Загрузка списка проектов</value>
+  </Message>
+  <Message name="LoadingProjectDetails">
+    <value>Загрузка деталей проекта</value>
+  </Message>
+  <Message name="UpdatingProjectDetails">
+    <value>Обновление деталей проекта</value>
+  </Message>
+  <Message name="CreatingNewProject">
+    <value>Создание нового проекта</value>
+  </Message>
+  <Message name="DeletingProject">
+    <value>Удаление информации о проекте</value>
+  </Message>
+  <Message name="CreateProjectBtn">
+    <value>Добавить проект</value>
+  </Message>
+  <Message name="DeleteProjectBtn">
+    <value>Удалить проект</value>
+  </Message>
+  <Message name="UpdateProjectBtn">
+    <value>Обновить проект</value>
+  </Message>
+  <Message name="ProjectNotExists">
+    <value>Проекта с Id={0} нет в базе</value>
+  </Message>
+  <Message name="ProjectDetailsUpdatedSuccessfully">
+    <value>Детали проекта обновлены</value>
+  </Message>
+  <Message name="ProjectDeletedSuccessfully">
+    <value>Проект удален</value>
+  </Message>
+  <Message name="ProjectCreatedSuccessfully">
+    <value>Проект создан</value>
+  </Message>
+  <Message name="ClientCompanyName">
+    <value>Заказчик</value>
+  </Message>
+  <Message name="ExecutiveCompanyName">
+    <value>Исполнитель</value>
+  </Message>
+  <Message name="StartDate">
+    <value>Начало</value>
+  </Message>
+  <Message name="EndDate">
+    <value>Окончание</value>
+  </Message>
+  <Message name="Priority">
+    <value>Приоритет</value>
+  </Message>
+  <Message name="Comment">
+    <value>Комментарии</value>
+  </Message>
+  <Message name="ProjectManagerName">
+    <value>Руководитель</value>
+  </Message>  
+</Messages>

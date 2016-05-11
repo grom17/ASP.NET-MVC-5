@@ -29,6 +29,14 @@ namespace ProjectsApp.DAL
         [StringLength(50)]
         public string Patronymic { get; set; }
 
+        public string Fullname
+        {
+            get
+            {
+                return FirstName.Substring(0, 1) + '.' + Patronymic.Substring(0, 1) + '.' + LastName;
+            }
+        }
+
         [Required]
         [StringLength(50)]
         public string Email { get; set; }

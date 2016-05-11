@@ -32,7 +32,9 @@ public class Messages
     public static Messages GetInstance()
     {
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        string fn = HttpContext.Current.Request.MapPath("~/App_Data/") + Filename;
+        string fn = (HttpContext.Current != null) && (HttpContext.Current.Request.MapPath("~/App_Data/") != null) ?
+            HttpContext.Current.Request.MapPath("~/App_Data/") + Filename :
+            baseDir.Substring(0, baseDir.IndexOf("ProjectsApp") + 11) + "\\ProjectsApp\\App_Data\\" + Filename;
         if (mInstance == null || (File.Exists(fn) && File.GetLastWriteTime(fn) != LastWriteTime))
         {
 
