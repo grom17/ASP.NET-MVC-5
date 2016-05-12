@@ -41,8 +41,11 @@ namespace ProjectsApp
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/bootstrap").IncludeDirectory(
-                      "~/Content/Bootstrap","*.css", true));
+            bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+                      "~/Content/Bootstrap/bootstrap-datetimepicker.min.css",
+                      "~/Content/Bootstrap/bootstrap-dtp-wrap.min.css",
+                      "~/Content/Bootstrap/bootstrap-wrap.min.css",
+                      "~/Content/Bootstrap/bootstrap.css"));
 
             bundles.Add(new StyleBundle("~/Content/dtables").IncludeDirectory(
                       "~/Content/DataTables", "*.css", true));

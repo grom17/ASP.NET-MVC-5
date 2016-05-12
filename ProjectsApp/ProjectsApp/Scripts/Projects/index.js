@@ -15,7 +15,7 @@ function ReadProjects() {
         url: $("#projectsDiv").data("action-url"),
         success: function (result) {
             AjaxCommonSuccessHandling(result, function () {
-                ApplyProjectsListDataTable("projects", $("trHTML").val(), $.parseJSON(result));
+                ApplyProjectsListDataTable("projects", $("#projectsTrHTML").val(), $.parseJSON(result));
                 div.removeClass('hidden');
             });
         },
@@ -98,7 +98,7 @@ function ApplyProjectsListDataTable(tableName, trHTML, data) {
             }
         ],
         // default order by priority
-        order: [[5, 'asc']],
+        order: [[7, 'asc']],
         // menu to select how much records will be shown on each page
         lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Все"]],
         // count of records to show on each page

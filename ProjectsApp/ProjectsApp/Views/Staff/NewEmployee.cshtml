@@ -8,7 +8,7 @@
 }, new { Id = "newEmployeeForm", @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Новый сотрудник</h4>
+    <h4>@Messages.NewEmployee</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <div class="form-group">

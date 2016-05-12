@@ -4,14 +4,17 @@
            onclick="BackToList()" />
 </p>
 
-@using (Ajax.BeginForm("UpdateProjectDetails", new { }, new AjaxOptions() {
-    OnBegin = "OnBeginUpdateProject", OnComplete = "OnCompleteUpdateProject",
-    OnSuccess = "OnSuccessUpdateProject", OnFailure = "AjaxCommonErrorHandling" },
-    new { Id = "projectDetailForm", @class = "form-horizontal", role = "form" }))
+@using (Ajax.BeginForm("UpdateProject", new { }, new AjaxOptions()
+{
+    OnBegin = "OnBeginUpdateProject",
+    OnComplete = "OnCompleteUpdateProject",
+    OnSuccess = "OnSuccessUpdateProject",
+    OnFailure = "AjaxCommonErrorHandling"
+},
+                new { Id = "projectDetailForm", @class = "form-horizontal", role = "form" }))
 {
     <hr />
     @Html.HiddenFor(m => m.ProjectId)
-    @Html.HiddenFor(m => m.ProjectManagerId)
     <div class="form-group">
         @Html.LabelFor(m => m.ClientCompanyName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -27,9 +30,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(c => c.ProjectManagerId, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.ProjectManagerId, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(c => c.ProjectManagerId, (ViewData["EmployeesList"] as IEnumerable<SelectListItem>)
+            @Html.DropDownListFor(m => m.ProjectManagerId, (ViewData["EmployeesList"] as IEnumerable<SelectListItem>)
                                                         .Select(f => new SelectListItem
                                                         {
                                                             Selected = f.Value == Model.ProjectManagerId.ToString(),
@@ -38,36 +41,32 @@
                                                         }), new { @class = "form-control" })
         </div>
     </div>
-    @*<div class="row cr-dates">
-        <div class="form-group">
-            <div class='col-sm-2'>
-                @Html.LabelFor(u => u.StartDate, new { @class = "label-left" })
-            </div>
-            <div class='col-sm-3'>
-                <div class='input-group date'>
-                    <input type="text" class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate.Value.ToString(ViewBag.NetDateTimeFormat)" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
-            <div class='col-sm-1-5'>
-                @Html.LabelFor(u => u.EndDate, new { @class = "label-left left" })
-            </div>
-            <div class='col-sm-3'>
-                <div class='input-group date'>
-                    <input type="text" class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate.Value.ToString(ViewBag.NetDateTimeFormat)" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+    <div class="form-group">
+        @Html.LabelFor(u => u.StartDate, new { @class = "col-sm-2 control-label" })
+        <div class='col-sm-3'>
+            <div class='input-group date'>
+                <input type="text" class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate.ToShortDateString()" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
             </div>
         </div>
-    </div>*@
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(u => u.EndDate, new { @class = "col-sm-2 control-label" })
+        <div class='col-sm-3'>
+            <div class='input-group date'>
+                <input type="text" class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate.ToShortDateString()" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.Priority, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Priority, new { @class = "form-control" })
+        <div class="col-sm-1-5">
+            @Html.TextBoxFor(m => m.Priority, new { @class = "form-control", maxlength = 2 })
             @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -77,34 +76,57 @@
             @Html.TextAreaFor(c => c.Comment, new { @class = "form-control", rows = 4 })
         </div>
     </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input id="updateProject" type="button" value="@Messages.UpdateProjectBtn" class="btn btn-default"
+                   data-loading-msg="@Messages.UpdatingProjectDetails"
+                   onclick="projectDetailFormSubmit()" />
+            <input id="deleteProject" type="button" value="@Messages.DeleteProjectBtn" class="btn btn-default"
+                   data-loading-msg="@Messages.DeletingProject"
+                   onclick="DeleteProject(@Model.ProjectId)" data-action-url="@Url.Action("DeleteProject")" />
+        </div>
+    </div>
 
-    @*<div id="teacherStudents" data-action-url="@Url.Action("LoadTeacherStudents")" data-loading-msg="Загрузка списка студентов">
-        <table id="teacherStudentsList" class="display" cellspacing="0">
+    <div id="projectExecutors" data-action-url="@Url.Action("LoadProjectExecutors")" data-loading-msg="Загрузка исполнителей проекта">
+        <h4>@Messages.ProjectExecutors</h4>
+        <div>
+            @Html.Label(Messages.AddExecutor, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(c => c.NewExecutorId, (ViewData["EmployeesList"] as IEnumerable<SelectListItem>), new { @class = "form-control" })
+                <input id="addProjectExecutor" type="button" value="@Messages.AddExecutorBtn" class="btn btn-default" data-action-url="@Url.Action("AddProjectExecutor")"
+                       data-loading-msg="@Messages.UpdatingProjectDetails"
+                       onclick="AddProjectExecutor(@Model.ProjectId)" />
+            </div>
+        </div>
+        <table id="projectExecutorsList" class="display" cellspacing="0">
             <thead>
                 <tr>
-                    <th></th>
-                    <th><input type="hidden" id="StudentId"></th>
-                    <th>Студент</th>
+                    <th>PersonId</th>
+                    <th>@Messages.FirstName</th>
+                    <th>@Messages.Patronymic</th>
+                    <th>@Messages.LastName</th>
+                    <th>@Messages.Email</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <th></th>
-                    <th>StudentId</th>
-                    <th>Студент</th>
+                    <th>PersonId</th>
+                    <th>@Messages.FirstName</th>
+                    <th>@Messages.Patronymic</th>
+                    <th>@Messages.LastName</th>
+                    <th>@Messages.Email</th>
                 </tr>
             </tfoot>
         </table>
-    </div>*@
-
+    </div>
+    <input type="hidden" id="executorsTrHTML"
+           value="<tr><th>PersonId</th><th>@Messages.FirstName</th><th>@Messages.Patronymic</th><th>@Messages.LastName</th><th>@Messages.Email</th></tr>" />
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input id="updateProject" type="button" value="@Messages.UpdateProjectBtn" class="btn btn-default"
-                    data-loading-msg="@Messages.UpdatingProjectDetails" 
-                    onclick="projectDetailFormSubmit()" />
-            <input id="deleteProject" type="button" value="@Messages.DeleteProjectBtn" class="btn btn-default"
-                    data-loading-msg="@Messages.DeletingProject"
-                    onclick="ProjectDelete(@Model.ProjectId)" data-action-url="@Url.Action("DeleteProject")" />
+        <div class="col-md-10">
+            <input id="selectedExecutorId" type="hidden" value="" />
+            <input id="removeProjectExecutor" type="button" value="Исключить" class="btn btn-default hidden"
+                   data-loading-msg="@Messages.DeletingProject"
+                   onclick="DeleteProjectExecutor(@Model.ProjectId)" data-action-url="@Url.Action("DeleteProjectExecutor")" />
         </div>
     </div>
 }
