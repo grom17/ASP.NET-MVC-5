@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Курсы валют";
+}
+
+<div class="jumbotron">
+    <h1>Курсы валют</h1>
+</div>
+
+<div class="row">
+    <div id="ratesDiv" style="height: 400px; min-width: 310px" data-action-url="@Url.Action("ReadRates")">
+        
+    </div>
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/highcharts")
+    @Scripts.Render("~/bundles/home")
+}
