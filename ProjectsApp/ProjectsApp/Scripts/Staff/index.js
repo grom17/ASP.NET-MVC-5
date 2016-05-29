@@ -15,7 +15,7 @@ function ReadStaff() {
         url: $("#staffDiv").data("action-url"),
         success: function (result) {
             AjaxCommonSuccessHandling(result, function () {
-                ApplyStaffListDataTable("staff", $("trHTML").val(), $.parseJSON(result));
+                ApplyStaffListDataTable("staff", $("#trHTML").val(), $.parseJSON(result));
                 div.removeClass('hidden');
             });
         },

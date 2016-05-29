@@ -1,0 +1,85 @@
+﻿@model ProjectModel
+@using (Ajax.BeginForm("CreateProject", new { }, new AjaxOptions()
+{
+    OnBegin = "OnBeginCreateProject",
+    OnComplete = "OnCompleteCreateProject",
+    OnSuccess = "OnSuccessCreateProject",
+    OnFailure = "AjaxCommonErrorHandling"
+},
+                new { Id = "createProjectForm", @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>@Messages.NewProject</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(m => m.ProjectId)
+    <div class="form-group">
+        @Html.LabelFor(m => m.ClientCompanyName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ClientCompanyName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ClientCompanyName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ExecutiveCompanyName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ExecutiveCompanyName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ExecutiveCompanyName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(c => c.ProjectManagerId, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(c => c.ProjectManagerId, (ViewData["EmployeesList"] as IEnumerable<SelectListItem>), new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(u => u.StartDate, new { @class = "col-sm-2 control-label" })
+        <div class='col-sm-3'>
+            <div class='input-group date'>
+                <input type="text" class="form-control" id="StartDate" name="StartDate" value="@Model.StartDate.ToShortDateString()" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(u => u.EndDate, new { @class = "col-sm-2 control-label" })
+        <div class='col-sm-3'>
+            <div class='input-group date'>
+                <input type="text" class="form-control" id="EndDate" name="EndDate" value="@Model.EndDate.ToShortDateString()" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Priority, new { @class = "col-md-2 control-label" })
+        <div class="col-sm-1-5">
+            @Html.TextBoxFor(m => m.Priority, new { @class = "form-control", maxlength = 2 })
+            @Html.ValidationMessageFor(m => m.Priority, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(c => c.Comment, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(c => c.Comment, new { @class = "form-control", rows = 4 })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="createProjectBtn" type="button" value="@Messages.CreateProjectBtn" class="btn btn-default"
+                   data-loading-msg="@Messages.CreatingNewProject"
+                   onclick="createProjectFormSubmit()" />
+        </div>
+    </div>
+}
+<br/>
+<p>
+    <input id="backToList" type="button" value="@Messages.BackBtn" class="btn btn-default"
+           onclick="BackToList()" />
+</p>
+
+

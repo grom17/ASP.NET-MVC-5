@@ -66,8 +66,11 @@
   <Message name="EmployeeCreatedSuccessfully">
     <value>Профиль сотрудника создан</value>
   </Message>
+  <Message name="NewEmployee">
+    <value>Новый сотрудник</value>
+  </Message>
   
-<!-- Projects -->
+  <!-- Projects -->
   <Message name="ProjectsTitle">
     <value>Проекты</value>
   </Message>
@@ -91,6 +94,9 @@
   </Message>
   <Message name="CreateProjectBtn">
     <value>Добавить проект</value>
+  </Message>
+  <Message name="AddExecutorBtn">
+    <value>Добавить</value>
   </Message>
   <Message name="DeleteProjectBtn">
     <value>Удалить проект</value>
@@ -126,9 +132,19 @@
     <value>Приоритет</value>
   </Message>
   <Message name="Comment">
-    <value>Комментарии</value>
+    <value>Комментарий</value>
   </Message>
   <Message name="ProjectManagerName">
     <value>Руководитель</value>
-  </Message>  
+  </Message>
+  <Message name="ProjectExecutors">
+    <value>Исполнители проекта:</value>
+  </Message>
+  <Message name="AddExecutor">
+    <value>Добавить сотрудника</value>
+  </Message>
+  <Message name="NewProject">
+    <value>Новый проект</value>
+  </Message>
+  
 </Messages>

@@ -138,6 +138,7 @@ public class Messages
     public static string EmployeeCreatedSuccessfully { get { return Instance["EmployeeCreatedSuccessfully"]; } }
 
     public static string EmployeeNotExists { get { return Instance["EmployeeNotExists"]; } }
+    public static string NewEmployee { get { return Instance["NewEmployee"]; } }
     #endregion
 
     #region Projects
@@ -162,11 +163,16 @@ public class Messages
     public static string CreateProjectBtn { get { return Instance["CreateProjectBtn"]; } }
     public static string DeleteProjectBtn { get { return Instance["DeleteProjectBtn"]; } }
     public static string UpdateProjectBtn { get { return Instance["UpdateProjectBtn"]; } }
+    public static string AddExecutorBtn { get { return Instance["AddExecutorBtn"]; } }
 
     public static string ProjectDetailsUpdatedSuccessfully { get { return Instance["ProjectDetailsUpdatedSuccessfully"]; } }
     public static string ProjectDeletedSuccessfully { get { return Instance["ProjectDeletedSuccessfully"]; } }
     public static string ProjectCreatedSuccessfully { get { return Instance["ProjectCreatedSuccessfully"]; } }
 
     public static string ProjectNotExists { get { return Instance["ProjectNotExists"]; } }
+
+    public static string ProjectExecutors { get { return Instance["ProjectExecutors"]; } }
+    public static string AddExecutor { get { return Instance["AddExecutor"]; } }
+    public static string NewProject { get { return Instance["NewProject"]; } }
     #endregion
 }

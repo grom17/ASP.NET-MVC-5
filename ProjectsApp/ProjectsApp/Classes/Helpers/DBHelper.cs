@@ -93,41 +93,55 @@ namespace ProjectsApp.Classes.Helpers
 
         public int CreateEmployee(EmployeeModel model)
         {
-            var Mapper = MapperHelper.CreateMap<EmployeeModel, Staff>();
-            var employee = Mapper.Map<Staff>(model);
-            using (ProjectsDB db = new ProjectsDB())
+            try
             {
-                db.Staff.Add(employee);
-                db.SaveChanges();
-                return db.Staff.Where(s => s.Email == model.Email).Select(s => s.PersonId).FirstOrDefault();
+                var Mapper = MapperHelper.CreateMap<EmployeeModel, Staff>();
+                var employee = Mapper.Map<Staff>(model);
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    db.Staff.Add(employee);
+                    db.SaveChanges();
+                    return db.Staff.Where(s => s.Email == model.Email).Select(s => s.PersonId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("CreateEmployee(): ", ex.ToString());
             }
         }
 
         public void DeleteEmployee(int PersonId)
         {
-            using (ProjectsDB db = new ProjectsDB())
+            try
             {
-                var employee = db.Staff.Where(s => s.PersonId == PersonId).FirstOrDefault();
-                if (employee != null)
+                using (ProjectsDB db = new ProjectsDB())
                 {
-                    db.Entry(employee).State = EntityState.Deleted;
-                    // Removing all dependencies 
-                    foreach (var pe in db.ProjectExecutors.ToList())
+                    var employee = db.Staff.Where(s => s.PersonId == PersonId).FirstOrDefault();
+                    if (employee != null)
                     {
-                        if (pe.ProjectExecutorId == PersonId)
+                        db.Entry(employee).State = EntityState.Deleted;
+                        // Removing all dependencies 
+                        foreach (var pe in db.ProjectExecutors.ToList())
                         {
-                            db.ProjectExecutors.Remove(pe);
+                            if (pe.ProjectExecutorId == PersonId)
+                            {
+                                db.ProjectExecutors.Remove(pe);
+                            }
                         }
-                    }
-                    foreach (var pi in db.ProjectInfo.ToList())
-                    {
-                        if (pi.ProjectManagerId == PersonId)
+                        foreach (var pi in db.ProjectInfo.ToList())
                         {
-                            db.ProjectInfo.Remove(pi);
+                            if (pi.ProjectManagerId == PersonId)
+                            {
+                                db.ProjectInfo.Remove(pi);
+                            }
                         }
+                        db.SaveChanges();
                     }
                 }
-                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("DeleteEmployee(): ", ex.ToString());
             }
         }
 
@@ -197,36 +211,176 @@ namespace ProjectsApp.Classes.Helpers
                                 ProjectManagerId = grp.Select(x => x.ProjectManagerId).FirstOrDefault(),
                                 ProjectManagerName = grp.Select(x => x.Staff.Fullname).FirstOrDefault()
                             }).ToList();
-            //foreach (var pr in projectsList)
-            //{
-            //    pr.ProjectExecutors = GetProjectExecutorsList(staff, executors, pr.ProjectId);
-            //}
             return projectsList;
+        }
+
+        public List<EmployeeModel> GetProjectExecutorsList(int ProjectId)
+        {
+            try
+            {
+                List<Staff> staff = new List<Staff>();
+                List<ProjectExecutors> executors = new List<ProjectExecutors>();
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    staff = db.Staff.ToList();
+                    executors = db.ProjectExecutors.ToList();
+                }
+                return GetProjectExecutorsList(staff, executors, ProjectId);
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("GetProjectExecutorsList(): ", ex.ToString());
+            }
         }
 
         public List<EmployeeModel> GetProjectExecutorsList(List<Staff> staff, List<ProjectExecutors> executors, int ProjectId)
         {
             try
             {
-                List<EmployeeModel> projectExecutors = new List<EmployeeModel>();
-                projectExecutors = (from pe in executors
-                                    where pe.ProjectId == ProjectId
-                                 join st in staff
-                                 on pe.ProjectExecutorId equals st.PersonId
-                                 group st by st.PersonId into grp
-                                 select new EmployeeModel
-                                 {
-                                     PersonId = grp.Select(x => x.PersonId).FirstOrDefault(),
-                                     FirstName = grp.Select(x => x.FirstName).FirstOrDefault(),
-                                     Patronymic = grp.Select(x => x.Patronymic).FirstOrDefault(),
-                                     LastName = grp.Select(x => x.LastName).FirstOrDefault(),
-                                     Email = grp.Select(x => x.Email).FirstOrDefault()
-                                 }).ToList();
-                return projectExecutors;
+                List<EmployeeModel> employees = new List<EmployeeModel>();
+                employees = (from pe in executors
+                             where pe.ProjectId == ProjectId
+                             join st in staff
+                             on pe.ProjectExecutorId equals st.PersonId
+                             group st by st.PersonId into grp
+                             select new EmployeeModel
+                             {
+                                 PersonId = grp.Select(x => x.PersonId).FirstOrDefault(),
+                                 FirstName = grp.Select(x => x.FirstName).FirstOrDefault(),
+                                 Patronymic = grp.Select(x => x.Patronymic).FirstOrDefault(),
+                                 LastName = grp.Select(x => x.LastName).FirstOrDefault(),
+                                 Email = grp.Select(x => x.Email).FirstOrDefault()
+                            }).ToList();              
+                return employees;
             }
             catch (Exception ex)
             {
                 throw new DBException("GetProjectExecutorsList(): ", ex.ToString());
+            }
+        }
+
+        public void AddProjectExecutor(int ProjectId, int PersonId)
+        {
+            try
+            {
+                ProjectExecutors executor = new ProjectExecutors { ProjectId = ProjectId, ProjectExecutorId = PersonId };
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    db.ProjectExecutors.Add(executor);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("AddProjectExecutor(): ", ex.ToString());
+            }
+        }
+
+        public bool ValidateProjectExecutor(int ProjectId, int PersonId)
+        {
+            try
+            {
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    return db.ProjectExecutors.Where(x => x.ProjectExecutorId == PersonId && x.ProjectId == ProjectId).Select(x => x.Id).FirstOrDefault() == 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("ValidateProjectExecutor(): ", ex.ToString());
+            }
+        }
+
+        public void DeleteProjectExecutor(int ProjectId, int PersonId)
+        {
+            try
+            {
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    var executor = db.ProjectExecutors.Where(x => x.ProjectId == ProjectId && x.ProjectExecutorId == PersonId).FirstOrDefault();
+                    if (executor != null)
+                    {
+                        db.Entry(executor).State = EntityState.Deleted;
+                    }
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("DeleteProjectExecutor(): ", ex.ToString());
+            }
+        }
+
+        public int CreateProject(ProjectModel model)
+        {
+            try
+            {
+                var Mapper = MapperHelper.CreateMap<ProjectModel, ProjectInfo>();
+                var project = Mapper.Map<ProjectInfo>(model);
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    db.ProjectInfo.Add(project);
+                    db.SaveChanges();
+                    int Id = db.ProjectInfo.Where(p => p.ClientCompanyName == model.ClientCompanyName && p.StartDate == model.StartDate).Select(s => s.ProjectId).FirstOrDefault();
+                    AddProjectExecutor(Id, model.ProjectManagerId);
+                    return Id;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("CreateProject(): ", ex.ToString());
+            }
+        }
+
+        public void UpdateProject(ProjectModel model)
+        {
+            try
+            {
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    var project = db.ProjectInfo.Where(p => p.ProjectId == model.ProjectId).FirstOrDefault();
+                    project.ClientCompanyName = model.ClientCompanyName;
+                    project.ExecutiveCompanyName = model.ExecutiveCompanyName;
+                    project.Priority = model.Priority;
+                    project.StartDate = model.StartDate;
+                    project.EndDate = model.EndDate;
+                    project.Comment = model.Comment;
+                    project.ProjectManagerId = model.ProjectManagerId;
+                    db.Entry(project).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("UpdateProject(): ", ex.ToString());
+            }
+        }
+
+        public void DeleteProject(int ProjectId)
+        {
+            try
+            {
+                using (ProjectsDB db = new ProjectsDB())
+                {
+                    var project = db.ProjectInfo.Where(p => p.ProjectId == ProjectId).FirstOrDefault();
+                    if (project != null)
+                    {
+                        db.Entry(project).State = EntityState.Deleted;
+                        // Removing dependencies 
+                        foreach (var pe in db.ProjectExecutors.ToList())
+                        {
+                            if (pe.ProjectId == ProjectId)
+                            {
+                                db.ProjectExecutors.Remove(pe);
+                            }
+                        }
+                        db.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DBException("DeleteProject(): ", ex.ToString());
             }
         }
     }
