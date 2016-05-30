@@ -3,17 +3,17 @@
 }
 
 <div class="jumbotron">
-    <h1>Курсы валют</h1>
+    <h1>Курсы валют с 01.04.2016</h1>
 </div>
 
 <div class="row">
-    <div id="ratesDiv" style="height: 400px; min-width: 310px" data-action-url="@Url.Action("ReadRates")">
+    <div id="ratesDiv" style="height: 400px; width: 100%" data-action-url="@Url.Action("ReadRates")">
         
     </div>
 </div>
 
 @section scripts
 {
-    @Scripts.Render("~/bundles/highcharts")
+    @Scripts.Render("~/bundles/canvasjs")
     @Scripts.Render("~/bundles/home")
 }

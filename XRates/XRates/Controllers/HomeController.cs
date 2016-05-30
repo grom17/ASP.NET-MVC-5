@@ -1,6 +1,10 @@
 ﻿using System.Web.Mvc;
 using XRates.Classes;
 using XRates.DAL.EF;
+using System.Linq;
+using System.Collections.Generic;
+using System;
+using XRates.BLL;
 
 namespace XRates.Controllers
 {
@@ -13,8 +17,8 @@ namespace XRates.Controllers
 
         public ActionResult ReadRates()
         {
-            var rates = DBHelper.Instance.GetRates();
-            return Content(GlobalHelper.Json(rates));
+            var data = RateService.Instance.GetRates();
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }

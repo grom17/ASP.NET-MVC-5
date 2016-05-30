@@ -6,6 +6,6 @@ namespace XRates.DAL.WS.Models
     {
         public DateTime CursDate { get; set; }
         public string Vcode { get; set; }
-        public decimal Vcurs { get; set; }
+        public double Vcurs { get; set; }
     }
 }

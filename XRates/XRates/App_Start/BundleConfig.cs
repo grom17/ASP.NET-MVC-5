@@ -14,8 +14,8 @@ namespace XRates
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/highcharts").IncludeDirectory(
-           "~/Scripts/Highcharts", "*.js", true));
+            bundles.Add(new ScriptBundle("~/bundles/canvasjs").Include(
+           "~/Scripts/CanvasJS/jquery.canvasjs.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/home").IncludeDirectory(
            "~/Scripts/Home", "*.js", true));

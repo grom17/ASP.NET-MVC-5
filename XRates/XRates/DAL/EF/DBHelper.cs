@@ -9,7 +9,7 @@ namespace XRates.DAL.EF
     public class DBHelper
     {
         private static DBHelper mInstance = null;
-        private const string connectionStringName = "RatesDB";
+        private const string connectionStringName = "Rates_DB";
         private DBHelper() { }
         public static DBHelper Instance
         {
