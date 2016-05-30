@@ -5,33 +5,19 @@
 function ReadRates()
 {
     var div = $("#ratesDiv");
-    //LoadingState(true);
-    //LoadingStateMessage(div);
     $.ajax({
         url: $("#ratesDiv").data("action-url"),
         success: function (result) {
-            //AjaxCommonSuccessHandling(result, function () {
-            //    ApplyChart("ratesDiv", $.parseJSON(result));
-            //});
-            //ApplyChart($.parseJSON(result));
             ApplyChart(result);
         },
-        //error: AjaxCommonErrorHandling,
         complete: function (req, status) {
-            //LoadingState(false);
         }
     });
 }
 
 function GetDate(ticks)
 {
-    //ticks are in nanotime; convert to microtime
     var ticksToMicrotime = ticks / 10000;
-
-    //ticks are recorded from 1/1/1; get microtime difference from 1/1/1/ to 1/1/1970
-    var epochMicrotimeDiff = 2208988800000;
-
-    //new date is ticks, converted to microtime, minus difference from epoch microtime
     var tickDate = new Date(ticksToMicrotime);
     return tickDate;
 }
